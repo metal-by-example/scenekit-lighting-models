@@ -1,13 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6205" systemVersion="14A329f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="101000" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6205"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CWHLightingModelWindowController">
             <connections>
                 <outlet property="lightingModelMenu" destination="UlQ-XP-3CW" id="1Wg-az-STJ"/>
+                <outlet property="lightingModelPopupButton" destination="HuQ-mo-ozh" id="a4u-sW-3fR"/>
+                <outlet property="lightingViewController" destination="4gW-ij-1Gl" id="68P-Ki-53T"/>
+                <outlet property="parameterToolbarItem" destination="Tps-Pk-cT8" id="0aE-yZ-s8h"/>
                 <outlet property="targetView" destination="66R-ZL-Zgr" id="xAB-Zi-ssV"/>
                 <outlet property="window" destination="tL6-i1-KoK" id="1ef-zg-KqJ"/>
             </connections>
@@ -17,28 +21,26 @@
         <window title="SceneKit Lighting Model Template" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="tL6-i1-KoK" userLabel="LightingModelWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
-            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="640" height="480"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
-            <value key="maxSize" type="size" width="640" height="480"/>
-            <view key="contentView" id="JxA-pR-vhg">
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1095"/>
+            <value key="maxSize" type="size" width="1280" height="960"/>
+            <view key="contentView" translatesAutoresizingMaskIntoConstraints="NO" id="JxA-pR-vhg">
                 <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
-                <autoresizingMask key="autoresizingMask"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
-                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="66R-ZL-Zgr">
-                        <rect key="frame" x="0.0" y="0.0" width="649" height="555"/>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="66R-ZL-Zgr" customClass="CWHLightingView">
+                        <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     </customView>
                 </subviews>
             </view>
             <toolbar key="toolbar" implicitIdentifier="99A96965-9696-4A20-A7F4-9E6C085DB582" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="kcY-ac-DQQ">
                 <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="9B498165-F325-43DE-A2C5-6DEA27C3C7F2" label="Input Parameters" paletteLabel="Input Parameters" image="NSColorPanel" id="Tps-Pk-cT8">
+                    <toolbarItem implicitItemIdentifier="9B498165-F325-43DE-A2C5-6DEA27C3C7F2" label="Input Parameters" paletteLabel="Input Parameters" image="NSColorPanel" sizingBehavior="auto" id="Tps-Pk-cT8">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="18" height="25"/>
-                        <size key="maxSize" width="25" height="30"/>
                         <button key="view" id="WUe-oD-SIq">
-                            <rect key="frame" x="35" y="14" width="18" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <rect key="frame" x="24" y="14" width="50" height="41"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="NSColorPanel" imagePosition="overlaps" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yUm-by-4UQ">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
@@ -48,19 +50,17 @@
                             </connections>
                         </button>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="D5744E3A-D31C-4D1C-8215-6AF51D23737B" label="Lighting Model" paletteLabel="Lighting Model" id="aWf-fF-g8m">
+                    <toolbarItem implicitItemIdentifier="D5744E3A-D31C-4D1C-8215-6AF51D23737B" label="Lighting Model" paletteLabel="Lighting Model" title="Phong Point Light" sizingBehavior="auto" id="aWf-fF-g8m">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="80" height="28"/>
-                        <size key="maxSize" width="150" height="43"/>
                         <popUpButton key="view" verticalHuggingPriority="750" id="HuQ-mo-ozh">
-                            <rect key="frame" x="0.0" y="14" width="149" height="43"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="Phong Point Light" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="dF8-Ai-y7P" id="UrR-4G-zVx">
+                            <rect key="frame" x="0.0" y="14" width="162" height="25"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <popUpButtonCell key="cell" type="roundTextured" title="Phong Point Light" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="dF8-Ai-y7P" id="UrR-4G-zVx">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="UlQ-XP-3CW">
                                     <items>
-                                        <menuItem title="Phong Point Light" id="dF8-Ai-y7P"/>
+                                        <menuItem title="Phong Point Light" state="on" id="dF8-Ai-y7P"/>
                                         <menuItem title="Blinn" id="iCM-jc-oNK"/>
                                         <menuItem title="Edge Fuzz" id="uez-MC-ZVr"/>
                                         <menuItem title="EnvMap" id="qPl-qS-TdE"/>
@@ -92,6 +92,12 @@
             </connections>
             <point key="canvasLocation" x="385" y="452"/>
         </window>
+        <viewController id="4gW-ij-1Gl" customClass="CWHLightingViewController">
+            <connections>
+                <outlet property="lightingView" destination="66R-ZL-Zgr" id="tSa-f6-U6z"/>
+                <outlet property="view" destination="JxA-pR-vhg" id="XeL-MI-XJY"/>
+            </connections>
+        </viewController>
     </objects>
     <resources>
         <image name="NSColorPanel" width="32" height="32"/>

@@ -7,40 +7,52 @@
 //
 
 #import "CWHLUTSkinProgram.h"
-#import <GLKit/GLKit.h>
-#import <OpenGL/gl.h>
-#import <OpenGL/glext.h>
 
 @implementation CWHLUTSkinProgram
 
++(BOOL) supportsSecureCoding {
+    return YES;
+}
+
 -(instancetype)init
 {
-    
-    self = [super initWithProgram:@"LUTSkin"];
-    
-    if ( self != nil )
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
+
+    self = [super initWithLibrary:library vertexFunctionName:@"LUTSkinVertex" fragmentFunctionName:@"LUTSkinFragment"];
+
+    if (self != nil)
     {
+        self.delegate = self;
 
-        //some defaults
+        [self bindBuffers];
 
-        self.diffuseColor = [NSColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.];;
+        self.diffuseColor = [NSColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.0];;
         self.specularColor = [NSColor whiteColor];
         self.scatterColor = [NSColor redColor];
         self.wrap = 0.58;
         self.scatterWidth = 0.10;
-        self.shininess = 0.35;
-        
+        self.shininess = 0.35;        
     }
     
     return self;
-    
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
-    if (self = [super initWithProgram:@"LUTSkin"]) {
-        self.diffuseColor  = [decoder decodeObjectForKey:@"diffuseColor"];
-        self.specularColor  = [decoder decodeObjectForKey:@"specularColor"];
-        self.scatterColor  = [decoder decodeObjectForKey:@"scatterColor"];
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
+
+    self = [super initWithLibrary:library vertexFunctionName:@"LUTSkinVertex" fragmentFunctionName:@"LUTSkinFragment"];
+
+    if (self != nil)
+    {
+        self.delegate = self;
+
+        [self bindBuffers];
+
+        self.diffuseColor  = [decoder decodeObjectOfClass:[NSColor class] forKey:@"diffuseColor"];
+        self.specularColor  = [decoder decodeObjectOfClass:[NSColor class] forKey:@"specularColor"];
+        self.scatterColor  = [decoder decodeObjectOfClass:[NSColor class] forKey:@"scatterColor"];
         self.wrap = [decoder decodeDoubleForKey:@"wrap"];
         self.scatterWidth = [decoder decodeDoubleForKey:@"scatterWidth"];
         self.shininess = [decoder decodeDoubleForKey:@"shininess"];
@@ -57,100 +69,60 @@
     [encoder encodeDouble:_shininess forKey:@"shininess"];
 }
 
-- (BOOL)    program:(SCNProgram *)program
- bindValueForSymbol:(NSString *)symbol
-         atLocation:(unsigned int)location
-          programID:(unsigned int)programID
-           renderer:(SCNRenderer *)renderer
-{
-    
-    //NSLog(@" symbol %@", symbol);
-    
-    
-    if ([symbol isEqualToString:@"light_position"]) {
-        //NSLog(@" lightnode %@", self.lightnode);
-        if(self.lightnode){
-            //NSLog(@" lightnode position %f, %f, %f " , self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
-            glUniform3f(location, self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
-        }
-        
-        return YES; // indicate that the symbol was bound successfully.
-    }
-    
-    if ([symbol isEqualToString:@"diffuseColor"]) {
-        
-        if(self.diffuseColor){
-            
-            glUniform3f(location,[self.diffuseColor redComponent] , [self.diffuseColor greenComponent] , [self.diffuseColor blueComponent]);
-            
-        }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"specularColor"]) {
-        
-        if(self.specularColor){
-            //NSLog(@" self.ambient red %f green %f blue %f", [self.ambientColor redComponent], [self.ambientColor greenComponent], [self.ambientColor blueComponent]);
-            glUniform3f(location,[self.specularColor redComponent] , [self.specularColor greenComponent] , [self.specularColor blueComponent]);
-            
-        }
-        
-        return YES;
-    }
-    if ([symbol isEqualToString:@"scatterColor"]) {
-        
-        if(self.scatterColor){
-            //NSLog(@" self.ambient red %f green %f blue %f", [self.ambientColor redComponent], [self.ambientColor greenComponent], [self.ambientColor blueComponent]);
-            glUniform3f(location,[self.scatterColor redComponent] , [self.scatterColor greenComponent] , [self.scatterColor blueComponent]);
-            
-        }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"wrap"]) {
-        
-        if(self.wrap){
-            //NSLog(@" self.materialSpecularity %f", self.materialSpecularity);
-            glUniform1f(location, self.wrap);
-        }
-        
-        return YES; // indicate that the symbol was bound successfully.
-    }
-    
-    if ([symbol isEqualToString:@"scatterWidth"]) {
-        
-        if(self.scatterWidth){
-            //NSLog(@" self.materialSpecularity %f", self.materialSpecularity);
-            glUniform1f(location, self.scatterWidth);
-        }
-        
-        return YES; // indicate that the symbol was bound successfully.
-    }
-    
-    
-    if ([symbol isEqualToString:@"shininess"]) {
-        
-        if(self.shininess){
-            //NSLog(@" self.shininess %f", self.shininess);
-            glUniform1f(location, self.shininess);
-        }
-        
-        return YES; // indicate that the symbol was bound successfully.
-    }
-    
+- (void)bindBuffers {
+    SCNBufferBindingBlock lightBlock = ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        struct LightConstants {
+            float position[3];
+        } lights;
 
-    
-    
-    return NO; // no symbol was bound.
+        lights.position[0] = self.lightPosition.x;
+        lights.position[1] = self.lightPosition.y;
+        lights.position[2] = self.lightPosition.z;
+
+        [buffer writeBytes:&lights length:sizeof(lights)];
+    };
+
+    SCNBufferBindingBlock materialBlock = ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        struct MaterialConstants {
+            float diffuseColor[4];
+            float specularColor[4];
+        } material;
+
+        if (self.diffuseColor) {
+            material.diffuseColor[0] = self.diffuseColor.redComponent;
+            material.diffuseColor[1] = self.diffuseColor.greenComponent;
+            material.diffuseColor[2] = self.diffuseColor.blueComponent;
+            material.diffuseColor[3] = self.diffuseColor.alphaComponent;
+        }
+
+        if (self.specularColor) {
+            material.specularColor[0] = self.specularColor.redComponent;
+            material.specularColor[1] = self.specularColor.greenComponent;
+            material.specularColor[2] = self.specularColor.blueComponent;
+            material.specularColor[3] = self.specularColor.alphaComponent;
+        }
+
+        [buffer writeBytes:&material length:sizeof(material)];
+    };
+
+    [self handleBindingOfBufferNamed:@"light" frequency:SCNBufferFrequencyPerFrame usingBlock:lightBlock];
+    [self handleBindingOfBufferNamed:@"material" frequency:SCNBufferFrequencyPerShadable usingBlock:materialBlock];
 }
 
-#pragma  mark SCNProgramDelegate Protocol Methods
+- (NSDictionary *)shadableProperties {
+    NSDictionary *properties = @{
+        @"skinLUT" : [SCNMaterialProperty materialPropertyWithContents:@""]
+    };
+    return properties;
+}
+
+#pragma mark -  SCNProgramDelegate Protocol Methods
+
 - (void)program:(SCNProgram*)program handleError:(NSError*)error {
     // Log the shader compilation error
     NSLog(@"SceneKit compilation error: %@", error);
 }
-
 
 @end

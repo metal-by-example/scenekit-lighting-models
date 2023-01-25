@@ -9,24 +9,6 @@
 #import "CWHLightingModelWindowController.h"
 #import "CWHLightingViewController.h"
 #import "CWHParameterViewController.h"
-#import "CWHBlinnProgram.h"
-#import "CWHBlinnParameterViewController.h"
-#import "CWHEdgeFuzzProgram.h"
-#import "CWHEdgeFuzzParameterViewController.h"
-#import "CWHEnvMapProgram.h"
-#import "CWHEnvMapParameterViewController.h"
-#import "CWHGlossyWetHighlightProgram.h"
-#import "CWHGlossyWetHighlightParameterViewController.h"
-#import "CWHGoochProgram.h"
-#import "CWHGoochParameterViewController.h"
-#import "CWHHemisphereParameterViewController.h"
-#import "CWHHemisphereProgram.h"
-#import "CWHLambSkinProgram.h"
-#import "CWHLambSkinParameterViewController.h"
-#import "CWHPhongPointLightProgram.h"
-#import "CWHPhongPointLightParameterViewController.h"
-#import "CWHVelvetParameterViewController.h"
-#import "CWHVelvetProgram.h"
 
 @interface CWHLightingModelWindowController ()
 -(void)saveShaderValues;
@@ -36,89 +18,59 @@
 
 - (void)awakeFromNib
 {
-    self.lightingViewController = [[CWHLightingViewController alloc] initWithNibName:@"CWHLightingView" bundle:nil];
-    [targetView addSubview:[self.lightingViewController view]];
-   
-
     self.lightingParameterState = FALSE;
-    NSMenuItem *menuItem = [self.lightingModelMenu itemAtIndex:0];
-    NSString *programTitle = [menuItem title];
-    
-    self.currentLightingProgram = programTitle;
-
+    [self updateLightingModel:self.lightingModelPopupButton];
 }
 
-- (void)windowDidLoad {
-    [super windowDidLoad];
-   
-    // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
-}
-
--(void)parameterViewWillClose{
+-(void)parameterViewWillClose {
     self.lightingParameterState = FALSE;
     [self saveShaderValues];
 }
 
--(void)updateShaderValues:(SCNProgram *)program;
+-(void)updateProgram:(SCNProgram *)program shadableProperties:(NSDictionary<NSString *, SCNMaterialProperty *> *)properties;
 {
-
     self.currentProgram = program;
-    [self.lightingViewController.torusNode updateParameters:program];
+
+    SCNNode *shadedNode = self.lightingViewController.geometryNode;
+
+    SCNMaterial *programMaterial = [SCNMaterial material];
+    programMaterial.program = program;
+    for (NSString *key in properties) {
+        [programMaterial setValue:properties[key] forKey:key];
+    }
+    shadedNode.geometry.materials = @[programMaterial];
 }
 
--(CWHParameterViewController *)parameterViewControllerForLightingModel:(NSString *)lightingModel
+-(CWHParameterViewController *)parameterViewControllerForCurrentProgram
 {
-    CWHParameterViewController *parameterViewController;
-    Class parameterViewControllerClass;
-    NSString *strippedString = [lightingModel stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSString *strippedString = [self.currentLightingModel stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSString *programString = [NSString stringWithFormat:@"CWH%@ParameterViewController", strippedString];
     NSString *nibString = [NSString stringWithFormat:@"%@ParameterView", strippedString];
-    //NSLog(@"programString %@", programString);
-    //NSLog(@"nibString %@", nibString);
-    
-    parameterViewControllerClass = NSClassFromString(programString);
-    if(parameterViewControllerClass){
-        NSLog(@"parameterViewControllerClass %@", parameterViewControllerClass);
+
+    Class parameterViewControllerClass = NSClassFromString(programString);
+    CWHParameterViewController *parameterViewController = nil;
+    if (parameterViewControllerClass) {
         parameterViewController = [[parameterViewControllerClass alloc]
                                    initWithNibName:nibString bundle:nil];
     }
     
-    parameterViewController.program = [self programForLightingModel:lightingModel];
+    parameterViewController.program = self.currentProgram;
     
     return parameterViewController;
 }
 
 -(IBAction)showInputParameters:(id)sender
 {
-   
     if(self.lightingParameterState == FALSE){
+        CWHParameterViewController *parameterViewController = [self parameterViewControllerForCurrentProgram];
 
-        NSRect targetRect = [targetView frame];
-        CGFloat toolbarHeight = 0;
-        NSRect  windowFrame;
-        windowFrame = [NSWindow contentRectForFrameRect:targetView.window.frame
-                                              styleMask:targetView.window.styleMask];
-        toolbarHeight = NSHeight(windowFrame) - NSHeight([targetView frame]);
-       
-        /*
-        NSLog(@"toolbarHeight %@", NSStringFromRect(windowFrame));
-        NSLog(@"parameterView.frame %@", NSStringFromRect(parameterViewController.view.frame));
-        NSLog(@" bounds %@", NSStringFromRect(targetRect));
-        */
-        
-        CWHParameterViewController *parameterViewController = [self parameterViewControllerForLightingModel:self.currentLightingProgram];
-        double viewHeight = parameterViewController.view.frame.size.height;
-        //NSLog(@" viewHeight %f", viewHeight);
-        viewHeight = 180;//calc min height here
         if (parameterViewController) {
             [self.lightingViewController presentViewController:parameterViewController
-                                       asPopoverRelativeToRect:NSMakeRect(targetRect.origin.x / 2,
-                                                                          targetRect.size.height - viewHeight / 2,
-                                                                          targetRect.size.width,
-                                                                          targetRect.size.height / 2)
-                                                        ofView:targetView
-                                                 preferredEdge:NSMinYEdge
+                                       asPopoverRelativeToRect:self.parameterToolbarItem.view.bounds
+                                                        ofView:self.parameterToolbarItem.view
+                                                 preferredEdge:NSMaxYEdge
                                                       behavior:NSPopoverBehaviorTransient];
+
             parameterViewController.delegate = self;
             self.lightingParameterState = TRUE;
         }
@@ -131,42 +83,35 @@
 
 -(void)saveShaderValues
 {
-    if(self.currentProgram){
+    NSError *error = nil;
+    if(self.currentProgram) {
         NSString *className = NSStringFromClass([self.currentProgram class]);
-        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.currentProgram];
-        [[NSUserDefaults standardUserDefaults] setObject:data forKey:className];
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.currentProgram requiringSecureCoding:YES error:&error];
+        if (data) {
+            [[NSUserDefaults standardUserDefaults] setObject:data forKey:className];
+        } else {
+            NSLog(@"Encountered error when serializing shader program: %@", error.localizedDescription);
+        }
     }
-    
 }
 
 -(SCNProgram *)programForLightingModel:(NSString *)lightingModel
 {
-   
-    
-    SCNProgram *program;
-    Class programClass;
     NSString *strippedString = [lightingModel stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSString *programString = [NSString stringWithFormat:@"CWH%@Program", strippedString];
-    //NSLog(@"programString %@", programString);
+    Class programClass = NSClassFromString(programString);
+
+    SCNProgram *program = nil;
     //unarchive here if we've changed some parameters
     NSData *programData = [[NSUserDefaults standardUserDefaults] objectForKey:programString];
     if(programData){
-
-        program = [NSKeyedUnarchiver unarchiveObjectWithData:programData];
-        //NSLog(@" unarchived program %@", program);
-
-        [program  setValue:self.lightingViewController.lightNode forKey:@"lightnode"];
-        self.currentProgram = program;
-        
-        return program;
-    }
-    
-    programClass = NSClassFromString(programString);
-    if(programClass){
+        NSError *error = nil;
+        program = [NSKeyedUnarchiver unarchivedObjectOfClass:programClass fromData:programData error:&error];
+        if (program == nil) {
+            NSLog(@"Encountered error when deserializing shader program: %@", error.localizedDescription);
+        }
+    } else if (programClass) {
         program = (SCNProgram *)[programClass program];
-        //Key/Value coding for light node since we pass around Superclass
-        [program  setValue:self.lightingViewController.lightNode forKey:@"lightnode"];
-        self.currentProgram = program;
     }
     
     return program;
@@ -174,15 +119,15 @@
 
 - (IBAction)updateLightingModel:(id)sender {
     NSString *updatedModel = [sender titleOfSelectedItem];
-    
-    NSLog(@" updateLightingModel %@", updatedModel);
-    //NSLog(@"self.currentLightingProgram %@", self.currentLightingProgram);
-    if(![self.currentLightingProgram isEqualToString:updatedModel]){
-       
-        [self.lightingViewController.torusNode updateLightingModel:[self programForLightingModel:updatedModel]];
-         self.currentLightingProgram = updatedModel;
+
+    if(![self.currentLightingModel isEqualToString:updatedModel]){
+        CWHLightingProgram *program = (CWHLightingProgram *)[self programForLightingModel:updatedModel];
+        NSAssert([program isKindOfClass:[CWHLightingProgram class]],
+                 @"Program for lighting model is expected to be an instance of a subclass of CWHLightingProgram");
+        NSDictionary *properties = program.shadableProperties;
+        [self updateProgram:program shadableProperties:properties];
+        self.currentLightingModel = updatedModel;
     }
-   
 }
 
 @end

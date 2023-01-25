@@ -11,10 +11,6 @@
 
 @implementation AppDelegate
 
-
-// -------------------------------------------------------------------------------
-//	newDocument:sender
-// -------------------------------------------------------------------------------
 - (IBAction)newDocument:(id)sender
 {
     if(windowController == nil)
@@ -25,18 +21,15 @@
     [windowController showWindow:self];
 }
 
-// -------------------------------------------------------------------------------
-//	applicationDidFinishLaunching:notification
-// -------------------------------------------------------------------------------
 - (void)applicationDidFinishLaunching:(NSNotification*)notification
 {
     [self newDocument:self];
 }
 
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
+    return YES;
+}
 
-// -------------------------------------------------------------------------------
-//	validateMenuItem:theMenuItem
-// -------------------------------------------------------------------------------
 - (BOOL)validateMenuItem:(NSMenuItem *)theMenuItem
 {
     BOOL enable = [self respondsToSelector:[theMenuItem action]];

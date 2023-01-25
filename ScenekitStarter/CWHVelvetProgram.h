@@ -8,9 +8,9 @@
 
 #import <SceneKit/SceneKit.h>
 #import "CWHLightingProgram.h"
-@interface CWHVelvetProgram : CWHLightingProgram<SCNProgramDelegate>
 
-@property (strong) SCNNode *lightnode;
+@interface CWHVelvetProgram : CWHLightingProgram <SCNProgramDelegate, NSSecureCoding>
+
 @property (strong) NSColor *underColor;
 @property (strong) NSColor *fuzzColor;
 @property (assign) double rolloff;

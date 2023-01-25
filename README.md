@@ -8,4 +8,4 @@ A demo app for previewing alternate lighting models using a custom SCNProgram wi
 
 A [short video](https://vimeo.com/106634143) of the app in action.
 
-10.10+ since I wanted to play with new OSX View Controller API. Lot's of code cleanup needed.
+![A screenshot showing the app in action](screenshots/01.png)

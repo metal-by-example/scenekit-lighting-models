@@ -20,17 +20,37 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do view setup here.
-    self.imagePath = [[NSBundle mainBundle] pathForResource:@"EnvMapInterior" ofType:@"png"];
-    self.ratio = 0.875;
+
+    double ratio = 0.875;
+    NSColor *ambientColor = [NSColor colorWithRed:0. green:0. blue:0. alpha:1.];
+    NSColor *diffuseColor = [NSColor colorWithRed:1. green:1. blue:1. alpha:1.];
+    NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"EnvMapInterior" ofType:@"png"];
+
+    if (self.program) {
+        ratio = [[self.program valueForKey:@"ratio"] doubleValue];
+        ambientColor = [self.program valueForKey:@"ambientColor"];
+        diffuseColor = [self.program valueForKey:@"diffuseColor"];
+        imagePath = [self.program valueForKey:@"imagePath"];
+    }
+
+    if (imagePath == nil) {
+        imagePath = [[NSBundle mainBundle] pathForResource:@"EnvMapInterior" ofType:@"png"];
+    }
+
+    NSString *envMapTitle = [[imagePath lastPathComponent] stringByDeletingPathExtension];
+
+    self.ratio = ratio;
     [self.ratioTextField setDoubleValue:self.ratio];
     [self.ratioSlider setDoubleValue:self.ratio];
-    NSColor *diffuseColor = [NSColor colorWithRed:1. green:1. blue:1. alpha:1.];
-    self.diffuseColor = diffuseColor;
-    [self.diffuseColorWell setColor:diffuseColor];
-    NSColor *ambientColor = [NSColor colorWithRed:0. green:0. blue:0. alpha:1.];
+
     self.ambientColor = ambientColor;
     [self.ambientColorWell setColor:ambientColor];
+
+    self.diffuseColor = diffuseColor;
+    [self.diffuseColorWell setColor:diffuseColor];
+
+    self.imagePath = imagePath;
+    [self.envMapMenu selectItemWithTitle:envMapTitle];
 }
 
 - (IBAction)updateRatio:(id)sender {
@@ -54,22 +74,22 @@
 }
 
 - (IBAction)updateEnvMap:(id)sender {
-   NSString *updatedMap = [sender titleOfSelectedItem];
-   //NSLog(@"updateEnvMap %@", updatedMap);
-   self.imagePath = [[NSBundle mainBundle] pathForResource:updatedMap ofType:@"png"];
+    NSString *updatedMap = [sender titleOfSelectedItem];
+    self.imagePath = [[NSBundle mainBundle] pathForResource:updatedMap ofType:@"png"];
+
+    [self updateShaderValues];
 }
 
 -(void)updateShaderValues
 {
-    CWHEnvMapProgram *program = [CWHEnvMapProgram program];
-    
+    CWHEnvMapProgram *program = (CWHEnvMapProgram *)self.program;
+
     program.ratio = self.ratio;
     program.ambientColor = self.ambientColor;
     program.diffuseColor = self.diffuseColor;
     program.imagePath = self.imagePath;
-    
-    [self.delegate updateShaderValues:program];
 
+    [self.delegate updateProgram:program shadableProperties:program.shadableProperties];
 }
 
 @end

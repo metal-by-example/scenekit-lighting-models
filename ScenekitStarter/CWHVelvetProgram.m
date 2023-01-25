@@ -7,40 +7,52 @@
 //
 
 #import "CWHVelvetProgram.h"
-#import <GLKit/GLKit.h>
-#import <OpenGL/gl.h>
-#import <OpenGL/glext.h>
 
 @implementation CWHVelvetProgram
 
++(BOOL) supportsSecureCoding {
+    return YES;
+}
+
 -(instancetype)init
 {
-    
-    self = [super initWithProgram:@"Velvet"];
-    
-    if ( self != nil )
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
+
+    self = [super initWithLibrary:library vertexFunctionName:@"VelvetVertex" fragmentFunctionName:@"VelvetFragment"];
+
+    if (self != nil)
     {
-        
-        //defaults
-        NSColor *underColor = [NSColor colorWithRed:0.7 green:0.7 blue:0 alpha:1.];
+        self.delegate = self;
+
+        [self bindBuffers];
+
+        NSColor *underColor = [NSColor colorWithRed:0.7 green:0.7 blue:0 alpha:1.0];
         self.underColor = underColor;
-        NSColor *fuzzColor = [NSColor colorWithRed:0.9 green:0.7 blue:0.5 alpha:1.];
+        NSColor *fuzzColor = [NSColor colorWithRed:0.9 green:0.7 blue:0.5 alpha:1.0];
         self.fuzzColor = fuzzColor;
         self.rolloff = 0.528;
     }
     
     return self;
-    
-    
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
-    if (self = [super initWithProgram:@"Velvet"]) {
-        self.underColor  = [decoder decodeObjectForKey:@"underColor"];
-        self.fuzzColor  = [decoder decodeObjectForKey:@"fuzzColor"];
-        self.primaryColor  = [decoder decodeObjectForKey:@"primaryColor"];
-        self.rolloff = [decoder decodeDoubleForKey:@"rolloff"];
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
 
+    self = [super initWithLibrary:library vertexFunctionName:@"VelvetVertex" fragmentFunctionName:@"VelvetFragment"];
+
+    if (self != nil)
+    {
+        self.delegate = self;
+
+        [self bindBuffers];
+
+        self.underColor  = [decoder decodeObjectOfClass:[NSColor class] forKey:@"underColor"];
+        self.fuzzColor  = [decoder decodeObjectOfClass:[NSColor class] forKey:@"fuzzColor"];
+        self.primaryColor  = [decoder decodeObjectOfClass:[NSColor class] forKey:@"primaryColor"];
+        self.rolloff = [decoder decodeDoubleForKey:@"rolloff"];
     }
     return self;
 }
@@ -52,65 +64,61 @@
     [encoder encodeDouble:_rolloff forKey:@"rolloff"];
 }
 
-- (BOOL)    program:(SCNProgram *)program
- bindValueForSymbol:(NSString *)symbol
-         atLocation:(unsigned int)location
-          programID:(unsigned int)programID
-           renderer:(SCNRenderer *)renderer
-{
-    
-    //NSLog(@" symbol %@", symbol);
-    
-    if ([symbol isEqualToString:@"light_position"]) {
-        //NSLog(@" lightnode %@", self.lightnode);
-        if(self.lightnode){
-            //NSLog(@" lightnode position %f, %f, %f " , self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
-            glUniform3f(location, self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
+- (void)bindBuffers {
+    SCNBufferBindingBlock lightBlock = ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        struct LightConstants {
+            float position[3];
+        } lights;
+
+        lights.position[0] = self.lightPosition.x;
+        lights.position[1] = self.lightPosition.y;
+        lights.position[2] = self.lightPosition.z;
+
+        [buffer writeBytes:&lights length:sizeof(lights)];
+    };
+
+    SCNBufferBindingBlock materialBlock = ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        struct MaterialConstants {
+            float primaryColor[4];
+            float fuzzColor[4];
+            float underColor[4];
+            float rolloff;
+        } material;
+
+        if (self.primaryColor) {
+            material.primaryColor[0] = self.primaryColor.redComponent;
+            material.primaryColor[1] = self.primaryColor.greenComponent;
+            material.primaryColor[2] = self.primaryColor.blueComponent;
+            material.primaryColor[3] = self.primaryColor.alphaComponent;
         }
-        
-        return YES; // indicate that the symbol was bound successfully.
-    }
-    
-    if ([symbol isEqualToString:@"PrimaryColor"]) {
-        
-        if(self.lightnode){
-            glUniform4f(location,[self.lightnode.light.color redComponent] , [self.lightnode.light.color greenComponent] , [self.lightnode.light.color blueComponent], 1.);
+
+        if (self.fuzzColor) {
+            material.fuzzColor[0] = self.fuzzColor.redComponent;
+            material.fuzzColor[1] = self.fuzzColor.greenComponent;
+            material.fuzzColor[2] = self.fuzzColor.blueComponent;
+            material.fuzzColor[3] = self.fuzzColor.alphaComponent;
         }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"UnderColor"]) {
-        
-        if(self.underColor){
-            glUniform4f(location,[self.underColor redComponent] , [self.underColor greenComponent] , [self.underColor blueComponent], [self.underColor alphaComponent]);
+
+        if (self.underColor) {
+            material.underColor[0] = self.underColor.redComponent;
+            material.underColor[1] = self.underColor.greenComponent;
+            material.underColor[2] = self.underColor.blueComponent;
+            material.underColor[3] = self.underColor.alphaComponent;
         }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"FuzzColor"]) {
-        
-        if(self.fuzzColor){
-            glUniform4f(location,[self.fuzzColor redComponent] , [self.fuzzColor greenComponent] , [self.fuzzColor blueComponent], [self.fuzzColor alphaComponent]);
-        }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"Rolloff"]) {
-        
-        if(self.rolloff){
-            glUniform1f(location,self.rolloff);
-        }
-        
-        return YES;
-    }
-    
-    return NO; // no symbol was bound.
+
+        material.rolloff = self.rolloff;
+
+        [buffer writeBytes:&material length:sizeof(material)];
+    };
+
+    [self handleBindingOfBufferNamed:@"light" frequency:SCNBufferFrequencyPerFrame usingBlock:lightBlock];
+    [self handleBindingOfBufferNamed:@"material" frequency:SCNBufferFrequencyPerFrame usingBlock:materialBlock];
 }
 
-#pragma  mark SCNProgramDelegate Protocol Methods
+#pragma mark - SCNProgramDelegate Protocol Methods
+
 - (void)program:(SCNProgram*)program handleError:(NSError*)error {
     // Log the shader compilation error
     NSLog(@"SceneKit compilation error: %@", error);

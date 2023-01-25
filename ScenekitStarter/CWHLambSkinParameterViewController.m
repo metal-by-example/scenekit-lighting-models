@@ -79,13 +79,13 @@
 -(void)updateShaderValues
 {
     
-    CWHLambSkinProgram *program = [CWHLambSkinProgram program];
+    CWHLambSkinProgram *program = (CWHLambSkinProgram *)self.program;
     
     program.rolloff = self.rolloff;
     program.ambientColor = self.ambientColor;
     program.diffuseColor = self.diffuseColor;
     program.subColor = self.subColor;
     
-    [self.delegate updateShaderValues:program];
+    [self.delegate updateProgram:program shadableProperties:nil];
 }
 @end

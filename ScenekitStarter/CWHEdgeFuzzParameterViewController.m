@@ -118,7 +118,7 @@
 
 -(void)updateShaderValues
 {
-    CWHEdgeFuzzProgram *program = [CWHEdgeFuzzProgram program];
+    CWHEdgeFuzzProgram *program = (CWHEdgeFuzzProgram *)self.program;
     
     program.fuzziness = self.fuzziness;
     program.surfaceColor = self.surfaceColor;
@@ -128,7 +128,7 @@
     program.lightColor = self.lightColor;
     program.ambientColor = self.ambientColor;
     
-    [self.delegate updateShaderValues:program];
+    [self.delegate updateProgram:program shadableProperties:nil];
 }
 
 @end

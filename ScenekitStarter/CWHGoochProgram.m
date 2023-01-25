@@ -7,49 +7,59 @@
 //
 
 #import "CWHGoochProgram.h"
-#import <GLKit/GLKit.h>
-#import <OpenGL/gl.h>
-#import <OpenGL/glext.h>
 
 @implementation CWHGoochProgram
 
++(BOOL) supportsSecureCoding {
+    return YES;
+}
+
 -(instancetype)init
 {
-    
-    self = [super initWithProgram:@"Gooch"];
-    
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
+
+    self = [super initWithLibrary:library vertexFunctionName:@"GoochVertex" fragmentFunctionName:@"GoochFragment"];
+
     if ( self != nil )
     {
+        self.delegate = self;
 
-        //defaults
+        [self bindBuffers];
+
         NSColor *surfaceColor = [NSColor redColor];
         self.surfaceColor = surfaceColor;
         
-        NSColor *coolColor = [NSColor colorWithRed:0.2 green:1. blue:0.2 alpha:1.];
+        NSColor *coolColor = [NSColor colorWithRed:0.2 green:1.0 blue:0.2 alpha:1.0];
         self.coolColor = coolColor;
 
         NSColor *warmColor = [NSColor purpleColor];
         self.warmColor = warmColor;
-       
-        
-        self.diffuseCool = 0.;
-        self.diffuseWarm = 1.;
-        
+
+        self.diffuseCool = 0.0;
+        self.diffuseWarm = 1.0;
     }
     
     return self;
-    
-    
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
-    if (self = [super initWithProgram:@"Gooch"]) {
-        self.coolColor =[decoder decodeObjectForKey:@"coolColor"];
-        self.warmColor  = [decoder decodeObjectForKey:@"warmColor"];
-        self.diffuseCool  = [decoder decodeDoubleForKey:@"diffuseCool"];
-        self.diffuseWarm  = [decoder decodeDoubleForKey:@"diffuseWarm"];
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
 
-        
+    self = [super initWithLibrary:library vertexFunctionName:@"GoochVertex" fragmentFunctionName:@"GoochFragment"];
+
+    if ( self != nil )
+    {
+        self.delegate = self;
+
+        [self bindBuffers];
+
+        self.coolColor = [decoder decodeObjectOfClass:[NSColor class] forKey:@"coolColor"];
+        self.warmColor = [decoder decodeObjectOfClass:[NSColor class] forKey:@"warmColor"];
+        self.surfaceColor = [decoder decodeObjectOfClass:[NSColor class] forKey:@"surfaceColor"];
+        self.diffuseCool = [decoder decodeDoubleForKey:@"diffuseCool"];
+        self.diffuseWarm = [decoder decodeDoubleForKey:@"diffuseWarm"];
     }
     return self;
 }
@@ -57,87 +67,71 @@
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [encoder encodeObject:_coolColor forKey:@"coolColor"];
     [encoder encodeObject:_warmColor forKey:@"warmColor"];
+    [encoder encodeObject:_surfaceColor forKey:@"surfaceColor"];
     [encoder encodeDouble:_diffuseCool forKey:@"diffuseCool"];
     [encoder encodeDouble:_diffuseWarm forKey:@"diffuseWarm"];
-   
 }
 
-- (BOOL)    program:(SCNProgram *)program
- bindValueForSymbol:(NSString *)symbol
-         atLocation:(unsigned int)location
-          programID:(unsigned int)programID
-           renderer:(SCNRenderer *)renderer
-{
-    
-    //NSLog(@" symbol %@", symbol);
-    
-    if ([symbol isEqualToString:@"light_position"]) {
-        //NSLog(@" lightnode %@", self.lightnode);
-        if(self.lightnode){
-            //NSLog(@" lightnode position %f, %f, %f " , self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
-            glUniform3f(location, self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
+- (void)bindBuffers {
+    SCNBufferBindingBlock lightBlock = ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        struct LightConstants {
+            float position[3];
+        } lights;
+
+        lights.position[0] = self.lightPosition.x;
+        lights.position[1] = self.lightPosition.y;
+        lights.position[2] = self.lightPosition.z;
+
+        [buffer writeBytes:&lights length:sizeof(lights)];
+    };
+
+    SCNBufferBindingBlock materialBlock = ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        struct MaterialConstants {
+            float surfaceColor[4];
+            float warmColor[4];
+            float coolColor[4];
+            float diffuseWarm;
+            float diffuseCool;
+        } material;
+
+        if (self.surfaceColor) {
+            material.surfaceColor[0] = self.surfaceColor.redComponent;
+            material.surfaceColor[1] = self.surfaceColor.greenComponent;
+            material.surfaceColor[2] = self.surfaceColor.blueComponent;
+            material.surfaceColor[3] = self.surfaceColor.alphaComponent;
         }
-        
-        return YES; // indicate that the symbol was bound successfully.
-    }
-    
-    if ([symbol isEqualToString:@"SurfaceColor"]) {
-       
-        if(self.surfaceColor){
-             //NSLog(@"self.surfaceColor %f %f %f", [self.surfaceColor redComponent], [self.surfaceColor blueComponent], [self.surfaceColor greenComponent]);
-             glUniform4f(location,[self.surfaceColor redComponent] , [self.surfaceColor greenComponent] , [self.surfaceColor blueComponent], [self.surfaceColor alphaComponent]);
+
+        if (self.warmColor) {
+            material.warmColor[0] = self.warmColor.redComponent;
+            material.warmColor[1] = self.warmColor.greenComponent;
+            material.warmColor[2] = self.warmColor.blueComponent;
+            material.warmColor[3] = self.warmColor.alphaComponent;
         }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"WarmColor"]) {
-        
-        if(self.warmColor){
-            //NSLog(@"self.warmColor %f %f %f", [self.warmColor redComponent], [self.warmColor blueComponent], [self.warmColor greenComponent]);
-            glUniform4f(location,[self.warmColor redComponent] , [self.warmColor greenComponent] , [self.warmColor blueComponent], [self.warmColor alphaComponent]);
+
+        if (self.coolColor) {
+            material.coolColor[0] = self.coolColor.redComponent;
+            material.coolColor[1] = self.coolColor.greenComponent;
+            material.coolColor[2] = self.coolColor.blueComponent;
+            material.coolColor[3] = self.coolColor.alphaComponent;
         }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"CoolColor"]) {
-        
-        if(self.coolColor){
-            //NSLog(@"self.coolColor %f %f %f", [self.coolColor redComponent], [self.coolColor blueComponent], [self.coolColor greenComponent]);
-            glUniform4f(location,[self.coolColor redComponent] , [self.coolColor greenComponent] , [self.coolColor blueComponent], [self.coolColor alphaComponent]);
-        }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"DiffuseCool"]) {
-        
-        if(self.diffuseCool){
-            glUniform1f(location,self.diffuseCool);
-        }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"DiffuseWarm"]) {
-        
-        if(self.diffuseWarm){
-            glUniform1f(location,self.diffuseWarm);
-        }
-        
-        return YES;
-    }
-    
-    return NO; // no symbol was bound.
+
+        material.diffuseWarm = self.diffuseWarm;
+        material.diffuseCool = self.diffuseCool;
+
+        [buffer writeBytes:&material length:sizeof(material)];
+    };
+
+    [self handleBindingOfBufferNamed:@"light" frequency:SCNBufferFrequencyPerFrame usingBlock:lightBlock];
+    [self handleBindingOfBufferNamed:@"material" frequency:SCNBufferFrequencyPerFrame usingBlock:materialBlock];
 }
 
-#pragma  mark SCNProgramDelegate Protocol Methods
+#pragma mark -  SCNProgramDelegate Protocol Methods
+
 - (void)program:(SCNProgram*)program handleError:(NSError*)error {
     // Log the shader compilation error
     NSLog(@"SceneKit compilation error: %@", error);
 }
-
-
 
 @end

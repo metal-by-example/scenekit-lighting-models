@@ -16,7 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if(self.program){
+    if (self.program) {
         NSColor *ambientColor = [self.program valueForKey:@"ambientColor"];
         
         if (ambientColor) {
@@ -53,12 +53,12 @@
 
 -(void)updateShaderValues
 {
-    CWHBlinnProgram *program = [CWHBlinnProgram program];
+    CWHBlinnProgram *program = (CWHBlinnProgram *)self.program;
     
     program.lightColor = self.lightColor;
     program.ambientColor = self.ambientColor;
     
-    [self.delegate updateShaderValues:program];
+    [self.delegate updateProgram:program shadableProperties:nil];
 }
 
 @end

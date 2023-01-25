@@ -9,9 +9,7 @@
 #import <SceneKit/SceneKit.h>
 #import "CWHLightingProgram.h"
 
-@interface CWHHemisphereProgram : CWHLightingProgram<SCNProgramDelegate, NSCoding>
-
-@property (strong) SCNNode *lightnode;
+@interface CWHHemisphereProgram : CWHLightingProgram <SCNProgramDelegate, NSSecureCoding>
 
 @property (strong) NSColor *skyColor;
 @property (strong) NSColor *groundColor;

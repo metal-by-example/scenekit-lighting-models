@@ -105,9 +105,7 @@
 
 -(void)updateShaderValues
 {
-    
-    CWHLUTSkinProgram *program = [CWHLUTSkinProgram program];
-    
+    CWHLUTSkinProgram *program = (CWHLUTSkinProgram *)self.program;    
 
     program.diffuseColor = [self.diffuseColorWell color];
     program.specularColor = [self.specularColorWell color];
@@ -116,7 +114,7 @@
     program.scatterWidth = [self.scatterWidthSlider  doubleValue];
     program.shininess  = [self.shininessSlider  doubleValue];
     
-    [self.delegate updateShaderValues:program];
+    [self.delegate updateProgram:program shadableProperties:nil];
 }
 
 @end

@@ -7,20 +7,26 @@
 //
 
 #import "CWHGlossyWetHighlightProgram.h"
-#import <GLKit/GLKit.h>
-#import <OpenGL/gl.h>
-#import <OpenGL/glext.h>
 
 @implementation CWHGlossyWetHighlightProgram
 
++(BOOL) supportsSecureCoding {
+    return YES;
+}
+
 -(instancetype)init
 {
-    
-    self = [super initWithProgram:@"GlossyWetHighlight"];
-    
-    if ( self != nil )
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
+
+    self = [super initWithLibrary:library vertexFunctionName:@"GlossyWetHighlightVertex" fragmentFunctionName:@"GlossyWetHighlightFragment"];
+
+    if (self != nil)
     {
-      
+        self.delegate = self;
+
+        [self bindBuffers];
+
         self.ambientColor = [NSColor colorWithRed:0. green:0. blue:0. alpha:1.];
         self.diffuseColor = [NSColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.];
         self.specularColor = [NSColor colorWithRed:1. green:0. blue:0. alpha:1.];
@@ -32,16 +38,23 @@
     }
     
     return self;
-    
-    
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
-    if (self = [super initWithProgram:@"GlossyWetHighlight"]) {
-       
-        self.ambientColor  = [decoder decodeObjectForKey:@"ambientColor"];
-        self.diffuseColor = [decoder decodeObjectForKey:@"diffuseColor"];
-        self.specularColor = [decoder decodeObjectForKey:@"specularColor"];
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
+
+    self = [super initWithLibrary:library vertexFunctionName:@"GlossyWetHighlightVertex" fragmentFunctionName:@"GlossyWetHighlightFragment"];
+
+    if (self != nil)
+    {
+        self.delegate = self;
+
+        [self bindBuffers];
+
+        self.ambientColor  = [decoder decodeObjectOfClass:[NSColor class] forKey:@"ambientColor"];
+        self.diffuseColor = [decoder decodeObjectOfClass:[NSColor class] forKey:@"diffuseColor"];
+        self.specularColor = [decoder decodeObjectOfClass:[NSColor class] forKey:@"specularColor"];
         self.specularity = [decoder decodeDoubleForKey:@"specularity"];
         self.specularExponent= [decoder decodeDoubleForKey:@"specularExponent"];
         self.glossMax= [decoder decodeDoubleForKey:@"glossMax"];
@@ -61,110 +74,72 @@
     [encoder encodeDouble:_glossMax forKey:@"glossMax"];
     [encoder encodeDouble:_glossMin forKey:@"glossMin"];
     [encoder encodeDouble:_glossDrop forKey:@"glossDrop"];
-    
 }
 
-- (BOOL)    program:(SCNProgram *)program
- bindValueForSymbol:(NSString *)symbol
-         atLocation:(unsigned int)location
-          programID:(unsigned int)programID
-           renderer:(SCNRenderer *)renderer
-{
-    
-    //NSLog(@" symbol %@", symbol);
-    
-    if ([symbol isEqualToString:@"light_position"]) {
-        //NSLog(@" lightnode %@", self.lightnode);
-        if(self.lightnode){
-            //NSLog(@" lightnode position %f, %f, %f " , self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
-            glUniform3f(location, self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
+- (void)bindBuffers {
+    SCNBufferBindingBlock lightBlock = ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        struct LightConstants {
+            float position[3];
+            float ambientIntensity[3];
+            float diffuseIntensity[3];
+            float specularIntensity[3];
+        } lights;
+
+        lights.position[0] = self.lightPosition.x;
+        lights.position[1] = self.lightPosition.y;
+        lights.position[2] = self.lightPosition.z;
+
+        if (self.ambientColor) {
+            lights.ambientIntensity[0] = [self.ambientColor redComponent];
+            lights.ambientIntensity[1] = [self.ambientColor greenComponent];
+            lights.ambientIntensity[2] = [self.ambientColor blueComponent];
         }
-        
-        return YES; // indicate that the symbol was bound successfully.
-    }
-    
-    if ([symbol isEqualToString:@"AmbientColor"]) {
-        
-        if(self.ambientColor){
-            glUniform4f(location,[self.ambientColor redComponent] , [self.ambientColor greenComponent] , [self.ambientColor blueComponent], [self.ambientColor alphaComponent]);
+
+        if (self.diffuseColor) {
+            lights.diffuseIntensity[0] = [self.diffuseColor redComponent];
+            lights.diffuseIntensity[1] = [self.diffuseColor greenComponent];
+            lights.diffuseIntensity[2] = [self.diffuseColor blueComponent];
         }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"SpecularColor"]) {
-        
-        if(self.specularColor){
-            glUniform4f(location,[self.specularColor redComponent] , [self.specularColor greenComponent] , [self.specularColor blueComponent], [self.specularColor alphaComponent]);
+
+        if (self.specularColor) {
+            lights.specularIntensity[0] = [self.specularColor redComponent];
+            lights.specularIntensity[1] = [self.specularColor greenComponent];
+            lights.specularIntensity[2] = [self.specularColor blueComponent];
         }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"diffuseColor"]) {
-        
-        if(self.diffuseColor){
-            glUniform4f(location,[self.diffuseColor redComponent] , [self.diffuseColor greenComponent] , [self.diffuseColor blueComponent], [self.diffuseColor alphaComponent]);
-        }
-        
-        return YES;
-    }
- 
-    
-    if ([symbol isEqualToString:@"Specularity"]) {
-        
-        if(self.specularity){
-            glUniform1f(location,self.specularity);
-        }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"SpecularExponent"]) {
-        
-        if(self.specularExponent){
-            glUniform1f(location,self.specularExponent);
-        }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"GlossMin"]) {
-        
-        if(self.glossMin){
-            glUniform1f(location,self.glossMin);
-        }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"GlossMax"]) {
-        
-        if(self.glossMax){
-            glUniform1f(location,self.glossMax);
-        }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"GlossDrop"]) {
-        
-        if(self.glossDrop){
-            glUniform1f(location,self.glossDrop);
-        }
-        
-        return YES;
-    }
- 
-    return NO; // no symbol was bound.
+
+        [buffer writeBytes:&lights length:sizeof(lights)];
+    };
+
+    SCNBufferBindingBlock materialBlock = ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        struct MaterialConstants {
+            float specularExponent;
+            float specularity;
+            float glossMin;
+            float glossMax;
+            float glossDrop;
+        } material;
+
+        material.specularExponent = self.specularExponent;
+        material.specularity = self.specularity;
+        material.glossMin = self.glossMin;
+        material.glossMax = self.glossMax;
+        material.glossDrop = self.glossDrop;
+
+        [buffer writeBytes:&material length:sizeof(material)];
+    };
+
+    [self handleBindingOfBufferNamed:@"vertexLights" frequency:SCNBufferFrequencyPerFrame usingBlock:lightBlock];
+    [self handleBindingOfBufferNamed:@"fragmentLights" frequency:SCNBufferFrequencyPerFrame usingBlock:lightBlock];
+    [self handleBindingOfBufferNamed:@"material" frequency:SCNBufferFrequencyPerFrame usingBlock:materialBlock];
 }
 
-#pragma  mark SCNProgramDelegate Protocol Methods
+#pragma mark - SCNProgramDelegate Protocol Methods
+
 - (void)program:(SCNProgram*)program handleError:(NSError*)error {
     // Log the shader compilation error
     NSLog(@"SceneKit compilation error: %@", error);
 }
-
-
 
 @end

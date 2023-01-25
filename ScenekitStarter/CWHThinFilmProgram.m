@@ -8,26 +8,27 @@
 
 #import "CWHThinFilmProgram.h"
 
-
 @implementation CWHThinFilmProgram
+
++(BOOL) supportsSecureCoding {
+    return YES;
+}
+
 - (instancetype)init
 {
-    self = [super initWithProgram:@"ThinFilm"];
-    
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
+
+    self = [super initWithLibrary:library vertexFunctionName:@"ThinFilmVertex" fragmentFunctionName:@"ThinFilmFragment"];
+
     if ( self != nil )
     {
-        
+        self.delegate = self;
+
         self.imagePath = [[NSBundle mainBundle] pathForResource:@"FringeMap" ofType:@"png"];
         
-        NSError *error = nil;
-        GLuint gError = glGetError();
-        self.texture = [GLKTextureLoader textureWithContentsOfFile:self.imagePath  options:nil error:&error];
-        if (gError != 0) {
-            NSLog(@"error %@", error);
-            NSLog(@"GL Error = %u", gError);
-        }
-        
-       //defaults
+        [self bindBuffers];
+
         self.filmDepth = 0.75;
         self.diffuseColor = [NSColor grayColor];
         
@@ -35,25 +36,26 @@
     return self;
 }
 - (id)initWithCoder:(NSCoder *)decoder {
-    if (self = [super initWithProgram:@"ThinFilm"]) {
-        NSString *imagePath =[decoder decodeObjectForKey:@"imagePath"];
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
+
+    self = [super initWithLibrary:library vertexFunctionName:@"ThinFilmVertex" fragmentFunctionName:@"ThinFilmFragment"];
+
+    if ( self != nil )
+    {
+        self.delegate = self;
+
+        NSString *imagePath =[decoder decodeObjectOfClass:[NSString class] forKey:@"imagePath"];
         if (imagePath) {
            self.imagePath  = imagePath;
-        }else{
+        } else {
             self.imagePath = [[NSBundle mainBundle] pathForResource:@"FringeMap" ofType:@"png"];
         }
-        
-        self.diffuseColor  = [decoder decodeObjectForKey:@"diffuseColor"];
+
+        [self bindBuffers];
+
+        self.diffuseColor  = [decoder decodeObjectOfClass:[NSColor class] forKey:@"diffuseColor"];
         self.filmDepth = [decoder decodeDoubleForKey:@"filmDepth"];
-        
-        NSError *error = nil;
-        GLuint gError = glGetError();
-        self.texture = [GLKTextureLoader textureWithContentsOfFile:self.imagePath  options:nil error:&error];
-        if (gError != 0) {
-            NSLog(@"error %@", error);
-            NSLog(@"GL Error = %u", gError);
-        }
-        
     }
     return self;
 }
@@ -64,70 +66,55 @@
     [encoder encodeDouble:_filmDepth  forKey:@"filmDepth"];
 }
 
-- (BOOL)    program:(SCNProgram *)program
- bindValueForSymbol:(NSString *)symbol
-         atLocation:(unsigned int)location
-          programID:(unsigned int)programID
-           renderer:(SCNRenderer *)renderer
-{
+- (void)bindBuffers {
+    SCNBufferBindingBlock lightBlock = ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        struct LightConstants {
+            float position[3];
+        } lights;
+        
+        lights.position[0] = self.lightPosition.x;
+        lights.position[1] = self.lightPosition.y;
+        lights.position[2] = self.lightPosition.z;
+        
+        [buffer writeBytes:&lights length:sizeof(lights)];
+    };
     
-    //NSLog(@" symbol %@", symbol);
-    
-    if ([symbol isEqualToString:@"light_position"]) {
-        //NSLog(@" lightnode %@", self.lightnode);
-        if(self.lightnode){
-            //NSLog(@" lightnode position %f, %f, %f " , self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
-            glUniform3f(location, self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
+    SCNBufferBindingBlock materialBlock = ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        struct MaterialConstants {
+            float diffuseColor[4];
+            float filmDepth;
+        } material;
+
+        if (self.diffuseColor) {
+            material.diffuseColor[0] = self.diffuseColor.redComponent;
+            material.diffuseColor[1] = self.diffuseColor.greenComponent;
+            material.diffuseColor[2] = self.diffuseColor.blueComponent;
+            material.diffuseColor[3] = self.diffuseColor.alphaComponent;
         }
         
-        return YES; // indicate that the symbol was bound successfully.
-    }
+        material.filmDepth = self.filmDepth;
+        
+        [buffer writeBytes:&material length:sizeof(material)];
+    };
     
-    if ([symbol isEqualToString:@"diffColor"]) {
-        
-        if(self.diffuseColor){
-            //NSLog(@" self.diffuseColor red %f green %f blue %f", [self.diffuseColor redComponent], [self.diffuseColor greenComponent], [self.diffuseColor blueComponent]);
-            glUniform3f(location,[self.diffuseColor redComponent] , [self.diffuseColor greenComponent] , [self.diffuseColor blueComponent]);
-            
-        }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"FringeMap"]) {
-        
-        //NSLog(@" self.texture %@", self.texture);
-        if(!self.texture){
-            NSError *error = nil;
-            GLuint gError = glGetError();
-            NSLog(@"GL Error = %u", gError);
-            NSLog(@"Error loading file %@", [error localizedDescription] );
-        }
-        
-        glBindTexture(GL_TEXTURE_2D, self.texture.name);
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"FilmDepth"]) {
-        
-        if(self.filmDepth){
-            //NSLog(@" self.filmDepth %f", self.filmDepth);
-            glUniform1f(location,self.filmDepth);
-        }
-        
-        return YES;
-    }
-    
-    return NO; // no symbol was bound.
+    [self handleBindingOfBufferNamed:@"light" frequency:SCNBufferFrequencyPerFrame usingBlock:lightBlock];
+    [self handleBindingOfBufferNamed:@"vertexMaterial" frequency:SCNBufferFrequencyPerFrame usingBlock:materialBlock];
+    [self handleBindingOfBufferNamed:@"fragmentMaterial" frequency:SCNBufferFrequencyPerFrame usingBlock:materialBlock];
 }
 
-#pragma  mark SCNProgramDelegate Protocol Methods
+- (NSDictionary *)shadableProperties {
+    NSDictionary *properties = @{
+        @"fringeMap" : [SCNMaterialProperty materialPropertyWithContents:self.imagePath]
+    };
+    return properties;
+}
+
+#pragma mark - SCNProgramDelegate Protocol Methods
 - (void)program:(SCNProgram*)program handleError:(NSError*)error {
     // Log the shader compilation error
     NSLog(@"SceneKit compilation error: %@", error);
 }
-
-
 
 @end

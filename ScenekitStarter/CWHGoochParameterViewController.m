@@ -16,17 +16,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do view setup here.
-    
+
     if(self.program){
-        
         NSColor *surfaceColor = [self.program valueForKey:@"surfaceColor"];
         if (surfaceColor) {
             [self.surfaceColorWell setColor:surfaceColor];
             self.surfaceColor= surfaceColor;
         }
-        
-        
+
         double diffuseWarm= [[self.program valueForKey:@"diffuseWarm"] doubleValue];
         if (diffuseWarm) {
             [self.diffuseWarmSlider setDoubleValue:diffuseWarm];
@@ -39,10 +36,9 @@
         [self.diffuseCoolSlider setDoubleValue:diffuseCool];
         [self.diffuseCoolTextField setDoubleValue:diffuseCool];
         self.diffuseCool = diffuseCool;
-        
 
         NSColor *warmColor  = [self.program valueForKey:@"warmColor"];
-        if (warmColor ) {
+        if (warmColor) {
             [self.warmColorWell setColor:warmColor ];
             self.warmColor  = warmColor ;
         }
@@ -53,12 +49,6 @@
             self.coolColor = coolColor;
         }
     }
-    
-}
-
--(void)viewDidDisappear
-{
-
 }
 
 - (IBAction)updateSurfaceColor:(id)sender {
@@ -84,7 +74,6 @@
     
     self.warmColor = color;
     [self updateShaderValues];
-    
 }
 
 - (IBAction)updateDiffuseCool:(id)sender {
@@ -110,14 +99,15 @@
 
 -(void)updateShaderValues
 {
-    CWHGoochProgram *program = [CWHGoochProgram program];
+    CWHGoochProgram *program = (CWHGoochProgram *)self.program;
+    
     program.surfaceColor = self.surfaceColor;
     program.warmColor = self.warmColor;
     program.coolColor = self.coolColor;
     program.diffuseCool = self.diffuseCool;
     program.diffuseWarm = self.diffuseWarm;
     
-    [self.delegate updateShaderValues:program];
+    [self.delegate updateProgram:program shadableProperties:nil];
 }
 
 

@@ -53,12 +53,12 @@
 
 -(void)updateShaderValues
 {
-    CWHThinFilmProgram *program = [CWHThinFilmProgram program];
+    CWHThinFilmProgram *program = (CWHThinFilmProgram *)self.program;
     
     program.filmDepth= self.filmDepth;
     program.diffuseColor = self.diffuseColor;
     
-    [self.delegate updateShaderValues:program];
+    [self.delegate updateProgram:program shadableProperties:program.shadableProperties];
 }
 
 @end

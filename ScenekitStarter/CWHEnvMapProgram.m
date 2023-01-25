@@ -7,17 +7,30 @@
 //
 
 #import "CWHEnvMapProgram.h"
-#import <GLKit/GLKit.h>
-#import <OpenGL/gl.h>
-#import <OpenGL/glext.h>
+
+@interface CWHEnvMapProgram ()
+@property (nonatomic, readonly) NSDictionary<NSString *, id> *shadableProperties;
+@end
 
 @implementation CWHEnvMapProgram
+
++(BOOL) supportsSecureCoding {
+    return YES;
+}
+
 - (instancetype)init
 {
-    self = [super initWithProgram:@"EnvMap"];
-    
-    if ( self != nil )
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
+
+    self = [super initWithLibrary:library vertexFunctionName:@"EnvMapVertex" fragmentFunctionName:@"EnvMapFragment"];
+
+    if (self != nil)
     {
+        self.delegate = self;
+
+        [self bindBuffers];
+
         NSColor *diffuseColor = [NSColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1.];
         self.diffuseColor = diffuseColor;
         NSColor *ambientColor = [NSColor colorWithRed:0. green:0. blue:0. alpha:1.];
@@ -29,12 +42,20 @@
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
-    if (self = [super initWithProgram:@"EnvMap"]) {
-        self.diffuseColor =[decoder decodeObjectForKey:@"diffuseColor"];
-        self.ambientColor  = [decoder decodeObjectForKey:@"ambientColor"];
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
+
+    self = [super initWithLibrary:library vertexFunctionName:@"EnvMapVertex" fragmentFunctionName:@"EnvMapFragment"];
+
+    if (self != nil) {
+        self.delegate = self;
+
+        [self bindBuffers];
+
+        self.diffuseColor =[decoder decodeObjectOfClass:[NSColor class] forKey:@"diffuseColor"];
+        self.ambientColor  = [decoder decodeObjectOfClass:[NSColor class] forKey:@"ambientColor"];
         self.ratio  = [decoder decodeDoubleForKey:@"ratio"];
-        self.imagePath = [decoder decodeObjectForKey:@"imagePath"];
-        
+        self.imagePath = [decoder decodeObjectOfClass:[NSString class] forKey:@"imagePath"];
     }
     return self;
 }
@@ -46,70 +67,49 @@
     [encoder encodeObject:_imagePath forKey:@"imagePath"];
 }
 
--(BOOL)    program:(SCNProgram *)program
-bindValueForSymbol:(NSString *)symbol
-        atLocation:(unsigned int)location
-         programID:(unsigned int)programID
-          renderer:(SCNRenderer *)renderer
-{
+- (void)bindBuffers {
+    SCNBufferBindingBlock lightBlock = ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        struct LightConstants {
+            float position[3];
+            float ambientIntensity[3];
+            float diffuseIntensity[3];
+        } lights;
 
-    if ([symbol isEqualToString:@"light_position"]) {
-        //NSLog(@" lightnode %@", self.lightnode);
-        if(self.lightnode){
-            //NSLog(@" lightnode position %f, %f, %f " , self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
-            glUniform3f(location, self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
-        }
-        
-        return YES; // indicate that the symbol was bound successfully.
-    }
-   
-    if ([symbol isEqualToString:@"Environment"]) {
+        lights.position[0] = self.lightPosition.x;
+        lights.position[1] = self.lightPosition.y;
+        lights.position[2] = self.lightPosition.z;
 
-        NSError *error = nil;
-        GLuint gError = glGetError();
-        GLKTextureInfo *texture = [GLKTextureLoader textureWithContentsOfFile: self.imagePath options:nil error:&error];
-        //NSLog(@" texture %@", texture);
-        if(!texture){
-            NSLog(@"GL Error = %u", gError);
-            NSLog(@"Error loading file %@", [error localizedDescription] );
+        if (self.diffuseColor) {
+            lights.diffuseIntensity[0] = [self.diffuseColor redComponent];
+            lights.diffuseIntensity[1] = [self.diffuseColor greenComponent];
+            lights.diffuseIntensity[2] = [self.diffuseColor blueComponent];
         }
-        
-        glBindTexture(GL_TEXTURE_2D, texture.name);
-        
-        return YES;
-    }
-    if ([symbol isEqualToString:@"DiffuseColor"]) {
-        
-        if(self.diffuseColor){
-             // NSLog(@" self.diffuseColor red %f green %f blue %f", [self.diffuseColor redComponent], [self.diffuseColor greenComponent], [self.diffuseColor blueComponent]);
-            glUniform4f(location,[self.diffuseColor redComponent] , [self.diffuseColor greenComponent] , [self.diffuseColor blueComponent], [self.diffuseColor alphaComponent]);
+
+        if (self.ambientColor) {
+            lights.ambientIntensity[0] = [self.ambientColor redComponent];
+            lights.ambientIntensity[1] = [self.ambientColor greenComponent];
+            lights.ambientIntensity[2] = [self.ambientColor blueComponent];
         }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"AmbientColor"]) {
-        
-        if(self.ambientColor){
-            //NSLog(@" self.ambient red %f green %f blue %f", [self.ambientColor redComponent], [self.ambientColor greenComponent], [self.ambientColor blueComponent]);
-            glUniform4f(location,[self.ambientColor redComponent] , [self.ambientColor greenComponent] , [self.ambientColor blueComponent], [self.ambientColor alphaComponent]);
-        }
-        
-        return YES;
-    }
-    
-    
-    if ([symbol isEqualToString:@"Ratio"]) {
-        
-        if(self.ratio){
-            //NSLog(@" self.ratio %f", self.ratio);
-            glUniform1f(location,self.ratio);
-        }
-        
-        return YES;
-    }
-    
-    return NO;
+
+        [buffer writeBytes:&lights length:sizeof(lights)];
+    };
+
+    [self handleBindingOfBufferNamed:@"vertexLights" frequency:SCNBufferFrequencyPerFrame usingBlock:lightBlock];
+    [self handleBindingOfBufferNamed:@"fragmentLights" frequency:SCNBufferFrequencyPerFrame usingBlock:lightBlock];
+    [self handleBindingOfBufferNamed:@"ratio" frequency:SCNBufferFrequencyPerFrame usingBlock:
+     ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        float ratio = self.ratio;
+        [buffer writeBytes:&ratio length:sizeof(float)];
+    }];
+}
+
+- (NSDictionary *)shadableProperties {
+    NSDictionary *properties = @{
+        @"environmentMap" : [SCNMaterialProperty materialPropertyWithContents:self.imagePath]
+    };
+    return properties;
 }
 
 @end

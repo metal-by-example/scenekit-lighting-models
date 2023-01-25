@@ -45,9 +45,6 @@
             [self.primaryColorWell setColor:primaryColor];
             self.primaryColor = primaryColor;
         }
-        
-      
-        
     }
 }
 
@@ -77,13 +74,13 @@
 
 -(void)updateShaderValues
 {
-    CWHVelvetProgram *program = [CWHVelvetProgram program];
+    CWHVelvetProgram *program = (CWHVelvetProgram *)self.program;
     
     program.rolloff = self.rolloff;
     program.underColor = self.underColor;
     program.fuzzColor = self.fuzzColor;
     program.primaryColor = self.primaryColor;
     
-    [self.delegate updateShaderValues:program];
+    [self.delegate updateProgram:program shadableProperties:nil];
 }
 @end

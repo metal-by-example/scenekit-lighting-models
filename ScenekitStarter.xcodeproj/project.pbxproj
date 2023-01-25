@@ -7,38 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		834C786529810588002DBB57 /* Velvet.metal in Sources */ = {isa = PBXBuildFile; fileRef = 834C786429810588002DBB57 /* Velvet.metal */; };
+		83C0DFAF2980742D002701C3 /* Phong.metal in Sources */ = {isa = PBXBuildFile; fileRef = 83C0DFAE2980742D002701C3 /* Phong.metal */; };
+		83C0DFB129808C34002701C3 /* EdgeFuzz.metal in Sources */ = {isa = PBXBuildFile; fileRef = 83C0DFB029808C34002701C3 /* EdgeFuzz.metal */; };
+		83E1060E29805D13008A89D2 /* Blinn.metal in Sources */ = {isa = PBXBuildFile; fileRef = 83E1060D29805D13008A89D2 /* Blinn.metal */; };
+		83E1061129805E81008A89D2 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83E1061029805E81008A89D2 /* Metal.framework */; };
+		83F2A9652980968300A93A09 /* EnvMap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 83F2A9642980968300A93A09 /* EnvMap.metal */; };
+		83F2A9672980B99100A93A09 /* GlossyWetHighlight.metal in Sources */ = {isa = PBXBuildFile; fileRef = 83F2A9662980B99100A93A09 /* GlossyWetHighlight.metal */; };
+		83F2A9692980DBC200A93A09 /* Gooch.metal in Sources */ = {isa = PBXBuildFile; fileRef = 83F2A9682980DBC200A93A09 /* Gooch.metal */; };
+		83F2A96B2980E96600A93A09 /* Hemisphere.metal in Sources */ = {isa = PBXBuildFile; fileRef = 83F2A96A2980E96600A93A09 /* Hemisphere.metal */; };
+		83F2A96D2980EDDC00A93A09 /* LambSkin.metal in Sources */ = {isa = PBXBuildFile; fileRef = 83F2A96C2980EDDC00A93A09 /* LambSkin.metal */; };
+		83F2A96F2980F23900A93A09 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83F2A96E2980F23800A93A09 /* SceneKit.framework */; };
+		83F2A9712980F24100A93A09 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83F2A9702980F24000A93A09 /* Foundation.framework */; };
+		83F2A9732980F24500A93A09 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83F2A9722980F24500A93A09 /* AppKit.framework */; };
+		83F2A9752980F5BA00A93A09 /* LUTSkin.metal in Sources */ = {isa = PBXBuildFile; fileRef = 83F2A9742980F5BA00A93A09 /* LUTSkin.metal */; };
+		83F2A9772980FBF700A93A09 /* ThinFilm.metal in Sources */ = {isa = PBXBuildFile; fileRef = 83F2A9762980FBF700A93A09 /* ThinFilm.metal */; };
 		BF018EF2199A93F700917508 /* GoochParameterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF018EF1199A93F700917508 /* GoochParameterView.xib */; };
 		BF018EF5199A948F00917508 /* CWHGoochParameterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF018EF4199A948F00917508 /* CWHGoochParameterViewController.m */; };
-		BF035B621986986E00F1C758 /* CWHShadingNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BF035B611986986E00F1C758 /* CWHShadingNode.m */; };
-		BF035B6619869A1000F1C758 /* PhongPointLight.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BF035B6419869A1000F1C758 /* PhongPointLight.fsh */; };
-		BF035B6719869A1000F1C758 /* PhongPointLight.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BF035B6519869A1000F1C758 /* PhongPointLight.vsh */; };
-		BF035B6A1987E9C300F1C758 /* Blinn.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BF035B681987E9C300F1C758 /* Blinn.fsh */; };
-		BF035B6B1987E9C300F1C758 /* Blinn.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BF035B691987E9C300F1C758 /* Blinn.vsh */; };
 		BF035B6E19882D8200F1C758 /* CWHBlinnProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = BF035B6D19882D8200F1C758 /* CWHBlinnProgram.m */; };
-		BF23482F19B777AC00DAEF95 /* ThinFilm.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BF23482E19B777AC00DAEF95 /* ThinFilm.vsh */; };
-		BF23483119B777B800DAEF95 /* ThinFilm.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BF23483019B777B800DAEF95 /* ThinFilm.fsh */; };
 		BF23483319B7BD4300DAEF95 /* FringeMap.png in Resources */ = {isa = PBXBuildFile; fileRef = BF23483219B7BD4300DAEF95 /* FringeMap.png */; };
 		BF23483719B8EB9500DAEF95 /* CWHThinFilmParameterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF23483519B8EB9500DAEF95 /* CWHThinFilmParameterViewController.m */; };
 		BF23483819B8EB9500DAEF95 /* ThinFilmParameterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF23483619B8EB9500DAEF95 /* ThinFilmParameterView.xib */; };
 		BF728C4E1989669F0018E76C /* CWHVelvetProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = BF728C4D1989669F0018E76C /* CWHVelvetProgram.m */; };
-		BF728C51198966CF0018E76C /* Velvet.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BF728C4F198966CF0018E76C /* Velvet.fsh */; };
-		BF728C52198966CF0018E76C /* Velvet.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BF728C50198966CF0018E76C /* Velvet.vsh */; };
 		BF728C55198A77E60018E76C /* CWHHemisphereProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = BF728C54198A77E60018E76C /* CWHHemisphereProgram.m */; };
-		BF728C58198A78710018E76C /* Hemisphere.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BF728C56198A78710018E76C /* Hemisphere.fsh */; };
-		BF728C59198A78710018E76C /* Hemisphere.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BF728C57198A78710018E76C /* Hemisphere.vsh */; };
 		BF728C5C198AB3980018E76C /* CWHGlossyWetHighlightProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = BF728C5B198AB3980018E76C /* CWHGlossyWetHighlightProgram.m */; };
-		BF728C5F198AB4500018E76C /* GlossyWetHighlight.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BF728C5D198AB4500018E76C /* GlossyWetHighlight.fsh */; };
-		BF728C60198AB4500018E76C /* GlossyWetHighlight.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BF728C5E198AB4500018E76C /* GlossyWetHighlight.vsh */; };
 		BF728C63198ABF450018E76C /* CWHLambSkinProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = BF728C62198ABF450018E76C /* CWHLambSkinProgram.m */; };
-		BF728C66198AC03E0018E76C /* LambSkin.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BF728C64198AC03E0018E76C /* LambSkin.fsh */; };
-		BF728C67198AC03E0018E76C /* LambSkin.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BF728C65198AC03E0018E76C /* LambSkin.vsh */; };
 		BF728C6A198AE6800018E76C /* CWHEdgeFuzzProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = BF728C69198AE6800018E76C /* CWHEdgeFuzzProgram.m */; };
-		BF728C6D198AE6EF0018E76C /* EdgeFuzz.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BF728C6B198AE6EF0018E76C /* EdgeFuzz.fsh */; };
-		BF728C6E198AE6EF0018E76C /* EdgeFuzz.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BF728C6C198AE6EF0018E76C /* EdgeFuzz.vsh */; };
 		BF7F560A19C38440004A199A /* CWHLUTSkinParameterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7F560819C38440004A199A /* CWHLUTSkinParameterViewController.m */; };
 		BF7F560B19C38440004A199A /* LUTSkinParameterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF7F560919C38440004A199A /* LUTSkinParameterView.xib */; };
-		BF7F560D19C38AAB004A199A /* LUTSkin.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BF7F560C19C38AAB004A199A /* LUTSkin.vsh */; };
-		BF7F560F19C38AC7004A199A /* LUTSkin.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BF7F560E19C38AC7004A199A /* LUTSkin.fsh */; };
 		BF7F561319C39A6C004A199A /* CWHGlossyWetHighlightParameterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7F561119C39A6C004A199A /* CWHGlossyWetHighlightParameterViewController.m */; };
 		BF7F561419C39A6C004A199A /* GlossyWetHighlightParameterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF7F561219C39A6C004A199A /* GlossyWetHighlightParameterView.xib */; };
 		BF91E0AF198AEF6A00965DF7 /* CWHLUTSkinProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = BF91E0AE198AEF6A00965DF7 /* CWHLUTSkinProgram.m */; };
@@ -48,7 +44,6 @@
 		BFB813D51981646100E09822 /* CWHLightingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFB813D41981646100E09822 /* CWHLightingViewController.m */; };
 		BFB813D91981646200E09822 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFB813D81981646200E09822 /* Images.xcassets */; };
 		BFB813DC1981646200E09822 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFB813DA1981646200E09822 /* MainMenu.xib */; };
-		BFB813E81981646200E09822 /* ScenekitStarterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BFB813E71981646200E09822 /* ScenekitStarterTests.m */; };
 		BFDF1DC719BF9C8200DD1473 /* CWHLightingProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = BFDF1DC619BF9C8200DD1473 /* CWHLightingProgram.m */; };
 		BFE295D719A62CA2006D5336 /* CWHHemisphereParameterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFE295D519A62CA2006D5336 /* CWHHemisphereParameterViewController.m */; };
 		BFE295D819A62CA2006D5336 /* HemisphereParameterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFE295D619A62CA2006D5336 /* HemisphereParameterView.xib */; };
@@ -57,8 +52,6 @@
 		BFE295E019AB66A7006D5336 /* CWHEnvMapProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = BFE295DF19AB66A7006D5336 /* CWHEnvMapProgram.m */; };
 		BFE2961B19AB6EA3006D5336 /* EnvMap.png in Resources */ = {isa = PBXBuildFile; fileRef = BFE2961919AB6EA3006D5336 /* EnvMap.png */; };
 		BFE2961C19AB6EA3006D5336 /* EnvMapInterior.png in Resources */ = {isa = PBXBuildFile; fileRef = BFE2961A19AB6EA3006D5336 /* EnvMapInterior.png */; };
-		BFE2961E19AB6F0A006D5336 /* EnvMap.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BFE2961D19AB6F0A006D5336 /* EnvMap.vsh */; };
-		BFE2962019AB6F19006D5336 /* EnvMap.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BFE2961F19AB6F19006D5336 /* EnvMap.fsh */; };
 		BFE2962419ABABA3006D5336 /* CWHEnvMapParameterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFE2962219ABABA3006D5336 /* CWHEnvMapParameterViewController.m */; };
 		BFE2962519ABABA3006D5336 /* EnvMapParameterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFE2962319ABABA3006D5336 /* EnvMapParameterView.xib */; };
 		BFE9F68F199CFF52000D9153 /* CWHParameterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFE9F68D199CFF52000D9153 /* CWHParameterViewController.m */; };
@@ -70,8 +63,6 @@
 		BFE9F6A2199EB2CD000D9153 /* EdgeFuzzParameterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFE9F6A0199EB2CD000D9153 /* EdgeFuzzParameterView.xib */; };
 		BFF2DE041988369500FBDAAD /* CWHPhongPointLightProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = BFF2DE031988369500FBDAAD /* CWHPhongPointLightProgram.m */; };
 		BFF2DE07198846F500FBDAAD /* CWHGoochProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = BFF2DE06198846F500FBDAAD /* CWHGoochProgram.m */; };
-		BFF2DE0A198847D100FBDAAD /* Gooch.fsh in Resources */ = {isa = PBXBuildFile; fileRef = BFF2DE08198847D100FBDAAD /* Gooch.fsh */; };
-		BFF2DE0B198847D100FBDAAD /* Gooch.vsh in Resources */ = {isa = PBXBuildFile; fileRef = BFF2DE09198847D100FBDAAD /* Gooch.vsh */; };
 		BFFB6DE8198BF0A500C14A7C /* PhongPointLightParameterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFFB6DE7198BF0A500C14A7C /* PhongPointLightParameterView.xib */; };
 		BFFB6DEB198C0E1500C14A7C /* CWHPhongPointLightParameterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFFB6DEA198C0E1500C14A7C /* CWHPhongPointLightParameterViewController.m */; };
 		BFFB6DEE198C272300C14A7C /* CWHLightingModelWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFFB6DED198C272300C14A7C /* CWHLightingModelWindowController.m */; };
@@ -80,59 +71,44 @@
 		BFFD8FD919D1AA8C009EAF06 /* CWHThinFilmProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = BFFD8FD819D1AA8C009EAF06 /* CWHThinFilmProgram.m */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		BFB813E21981646200E09822 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BFB813BE1981646100E09822 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BFB813C51981646100E09822;
-			remoteInfo = ScenekitStarter;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
+		834C786429810588002DBB57 /* Velvet.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Velvet.metal; sourceTree = "<group>"; };
+		83C0DFAE2980742D002701C3 /* Phong.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Phong.metal; sourceTree = "<group>"; };
+		83C0DFB029808C34002701C3 /* EdgeFuzz.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = EdgeFuzz.metal; sourceTree = "<group>"; };
+		83E1060D29805D13008A89D2 /* Blinn.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Blinn.metal; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.metal; };
+		83E1061029805E81008A89D2 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		83F2A9642980968300A93A09 /* EnvMap.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = EnvMap.metal; sourceTree = "<group>"; };
+		83F2A9662980B99100A93A09 /* GlossyWetHighlight.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = GlossyWetHighlight.metal; sourceTree = "<group>"; };
+		83F2A9682980DBC200A93A09 /* Gooch.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Gooch.metal; sourceTree = "<group>"; };
+		83F2A96A2980E96600A93A09 /* Hemisphere.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Hemisphere.metal; sourceTree = "<group>"; };
+		83F2A96C2980EDDC00A93A09 /* LambSkin.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = LambSkin.metal; sourceTree = "<group>"; };
+		83F2A96E2980F23800A93A09 /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
+		83F2A9702980F24000A93A09 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		83F2A9722980F24500A93A09 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		83F2A9742980F5BA00A93A09 /* LUTSkin.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = LUTSkin.metal; sourceTree = "<group>"; };
+		83F2A9762980FBF700A93A09 /* ThinFilm.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ThinFilm.metal; sourceTree = "<group>"; };
 		BF018EF1199A93F700917508 /* GoochParameterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GoochParameterView.xib; sourceTree = "<group>"; };
 		BF018EF3199A948F00917508 /* CWHGoochParameterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHGoochParameterViewController.h; sourceTree = "<group>"; };
 		BF018EF4199A948F00917508 /* CWHGoochParameterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHGoochParameterViewController.m; sourceTree = "<group>"; };
-		BF035B601986986E00F1C758 /* CWHShadingNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHShadingNode.h; sourceTree = "<group>"; };
-		BF035B611986986E00F1C758 /* CWHShadingNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHShadingNode.m; sourceTree = "<group>"; };
-		BF035B6419869A1000F1C758 /* PhongPointLight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PhongPointLight.fsh; sourceTree = "<group>"; };
-		BF035B6519869A1000F1C758 /* PhongPointLight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PhongPointLight.vsh; sourceTree = "<group>"; };
-		BF035B681987E9C300F1C758 /* Blinn.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Blinn.fsh; sourceTree = "<group>"; };
-		BF035B691987E9C300F1C758 /* Blinn.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Blinn.vsh; sourceTree = "<group>"; };
 		BF035B6C19882D8200F1C758 /* CWHBlinnProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHBlinnProgram.h; sourceTree = "<group>"; };
 		BF035B6D19882D8200F1C758 /* CWHBlinnProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHBlinnProgram.m; sourceTree = "<group>"; };
-		BF23482E19B777AC00DAEF95 /* ThinFilm.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ThinFilm.vsh; sourceTree = "<group>"; };
-		BF23483019B777B800DAEF95 /* ThinFilm.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ThinFilm.fsh; sourceTree = "<group>"; };
 		BF23483219B7BD4300DAEF95 /* FringeMap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FringeMap.png; sourceTree = "<group>"; };
 		BF23483419B8EB9500DAEF95 /* CWHThinFilmParameterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHThinFilmParameterViewController.h; sourceTree = "<group>"; };
 		BF23483519B8EB9500DAEF95 /* CWHThinFilmParameterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHThinFilmParameterViewController.m; sourceTree = "<group>"; };
 		BF23483619B8EB9500DAEF95 /* ThinFilmParameterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThinFilmParameterView.xib; sourceTree = "<group>"; };
 		BF728C4C1989669F0018E76C /* CWHVelvetProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHVelvetProgram.h; sourceTree = "<group>"; };
 		BF728C4D1989669F0018E76C /* CWHVelvetProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHVelvetProgram.m; sourceTree = "<group>"; };
-		BF728C4F198966CF0018E76C /* Velvet.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Velvet.fsh; sourceTree = "<group>"; };
-		BF728C50198966CF0018E76C /* Velvet.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Velvet.vsh; sourceTree = "<group>"; };
 		BF728C53198A77E60018E76C /* CWHHemisphereProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHHemisphereProgram.h; sourceTree = "<group>"; };
 		BF728C54198A77E60018E76C /* CWHHemisphereProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHHemisphereProgram.m; sourceTree = "<group>"; };
-		BF728C56198A78710018E76C /* Hemisphere.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Hemisphere.fsh; sourceTree = "<group>"; };
-		BF728C57198A78710018E76C /* Hemisphere.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Hemisphere.vsh; sourceTree = "<group>"; };
 		BF728C5A198AB3980018E76C /* CWHGlossyWetHighlightProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHGlossyWetHighlightProgram.h; sourceTree = "<group>"; };
 		BF728C5B198AB3980018E76C /* CWHGlossyWetHighlightProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHGlossyWetHighlightProgram.m; sourceTree = "<group>"; };
-		BF728C5D198AB4500018E76C /* GlossyWetHighlight.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GlossyWetHighlight.fsh; sourceTree = "<group>"; };
-		BF728C5E198AB4500018E76C /* GlossyWetHighlight.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GlossyWetHighlight.vsh; sourceTree = "<group>"; };
 		BF728C61198ABF450018E76C /* CWHLambSkinProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHLambSkinProgram.h; sourceTree = "<group>"; };
 		BF728C62198ABF450018E76C /* CWHLambSkinProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHLambSkinProgram.m; sourceTree = "<group>"; };
-		BF728C64198AC03E0018E76C /* LambSkin.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LambSkin.fsh; sourceTree = "<group>"; };
-		BF728C65198AC03E0018E76C /* LambSkin.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LambSkin.vsh; sourceTree = "<group>"; };
 		BF728C68198AE6800018E76C /* CWHEdgeFuzzProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHEdgeFuzzProgram.h; sourceTree = "<group>"; };
 		BF728C69198AE6800018E76C /* CWHEdgeFuzzProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHEdgeFuzzProgram.m; sourceTree = "<group>"; };
-		BF728C6B198AE6EF0018E76C /* EdgeFuzz.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EdgeFuzz.fsh; sourceTree = "<group>"; };
-		BF728C6C198AE6EF0018E76C /* EdgeFuzz.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EdgeFuzz.vsh; sourceTree = "<group>"; };
 		BF7F560719C38440004A199A /* CWHLUTSkinParameterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHLUTSkinParameterViewController.h; sourceTree = "<group>"; };
 		BF7F560819C38440004A199A /* CWHLUTSkinParameterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHLUTSkinParameterViewController.m; sourceTree = "<group>"; };
 		BF7F560919C38440004A199A /* LUTSkinParameterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LUTSkinParameterView.xib; sourceTree = "<group>"; };
-		BF7F560C19C38AAB004A199A /* LUTSkin.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LUTSkin.vsh; sourceTree = "<group>"; };
-		BF7F560E19C38AC7004A199A /* LUTSkin.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LUTSkin.fsh; sourceTree = "<group>"; };
 		BF7F561019C39A6C004A199A /* CWHGlossyWetHighlightParameterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHGlossyWetHighlightParameterViewController.h; sourceTree = "<group>"; };
 		BF7F561119C39A6C004A199A /* CWHGlossyWetHighlightParameterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHGlossyWetHighlightParameterViewController.m; sourceTree = "<group>"; };
 		BF7F561219C39A6C004A199A /* GlossyWetHighlightParameterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GlossyWetHighlightParameterView.xib; sourceTree = "<group>"; };
@@ -149,7 +125,6 @@
 		BFB813D41981646100E09822 /* CWHLightingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CWHLightingViewController.m; sourceTree = "<group>"; };
 		BFB813D81981646200E09822 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		BFB813DB1981646200E09822 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		BFB813E11981646200E09822 /* ScenekitStarterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScenekitStarterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFB813E61981646200E09822 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BFB813E71981646200E09822 /* ScenekitStarterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScenekitStarterTests.m; sourceTree = "<group>"; };
 		BFDF1DC519BF9C8200DD1473 /* CWHLightingProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHLightingProgram.h; sourceTree = "<group>"; };
@@ -164,8 +139,6 @@
 		BFE295DF19AB66A7006D5336 /* CWHEnvMapProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHEnvMapProgram.m; sourceTree = "<group>"; };
 		BFE2961919AB6EA3006D5336 /* EnvMap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EnvMap.png; sourceTree = "<group>"; };
 		BFE2961A19AB6EA3006D5336 /* EnvMapInterior.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EnvMapInterior.png; sourceTree = "<group>"; };
-		BFE2961D19AB6F0A006D5336 /* EnvMap.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EnvMap.vsh; sourceTree = "<group>"; };
-		BFE2961F19AB6F19006D5336 /* EnvMap.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EnvMap.fsh; sourceTree = "<group>"; };
 		BFE2962119ABABA3006D5336 /* CWHEnvMapParameterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHEnvMapParameterViewController.h; sourceTree = "<group>"; };
 		BFE2962219ABABA3006D5336 /* CWHEnvMapParameterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHEnvMapParameterViewController.m; sourceTree = "<group>"; };
 		BFE2962319ABABA3006D5336 /* EnvMapParameterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EnvMapParameterView.xib; sourceTree = "<group>"; };
@@ -185,8 +158,6 @@
 		BFF2DE031988369500FBDAAD /* CWHPhongPointLightProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHPhongPointLightProgram.m; sourceTree = "<group>"; };
 		BFF2DE05198846F500FBDAAD /* CWHGoochProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHGoochProgram.h; sourceTree = "<group>"; };
 		BFF2DE06198846F500FBDAAD /* CWHGoochProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHGoochProgram.m; sourceTree = "<group>"; };
-		BFF2DE08198847D100FBDAAD /* Gooch.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Gooch.fsh; sourceTree = "<group>"; };
-		BFF2DE09198847D100FBDAAD /* Gooch.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Gooch.vsh; sourceTree = "<group>"; };
 		BFFB6DE7198BF0A500C14A7C /* PhongPointLightParameterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhongPointLightParameterView.xib; sourceTree = "<group>"; };
 		BFFB6DE9198C0E1500C14A7C /* CWHPhongPointLightParameterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWHPhongPointLightParameterViewController.h; sourceTree = "<group>"; };
 		BFFB6DEA198C0E1500C14A7C /* CWHPhongPointLightParameterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWHPhongPointLightParameterViewController.m; sourceTree = "<group>"; };
@@ -203,19 +174,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BFB813DE1981646200E09822 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				83F2A96F2980F23900A93A09 /* SceneKit.framework in Frameworks */,
+				83F2A9732980F24500A93A09 /* AppKit.framework in Frameworks */,
+				83F2A9712980F24100A93A09 /* Foundation.framework in Frameworks */,
+				83E1061129805E81008A89D2 /* Metal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		83E1060F29805E81008A89D2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				83F2A9722980F24500A93A09 /* AppKit.framework */,
+				83F2A9702980F24000A93A09 /* Foundation.framework */,
+				83F2A96E2980F23800A93A09 /* SceneKit.framework */,
+				83E1061029805E81008A89D2 /* Metal.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		BF035B631986999600F1C758 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -236,28 +215,17 @@
 				BFFB6DE7198BF0A500C14A7C /* PhongPointLightParameterView.xib */,
 				BF23483619B8EB9500DAEF95 /* ThinFilmParameterView.xib */,
 				BFE9F696199E385E000D9153 /* VelvetParameterView.xib */,
-				BF035B691987E9C300F1C758 /* Blinn.vsh */,
-				BF035B681987E9C300F1C758 /* Blinn.fsh */,
-				BF728C6C198AE6EF0018E76C /* EdgeFuzz.vsh */,
-				BF728C6B198AE6EF0018E76C /* EdgeFuzz.fsh */,
-				BFE2961D19AB6F0A006D5336 /* EnvMap.vsh */,
-				BFE2961F19AB6F19006D5336 /* EnvMap.fsh */,
-				BF728C5E198AB4500018E76C /* GlossyWetHighlight.vsh */,
-				BF728C5D198AB4500018E76C /* GlossyWetHighlight.fsh */,
-				BFF2DE09198847D100FBDAAD /* Gooch.vsh */,
-				BFF2DE08198847D100FBDAAD /* Gooch.fsh */,
-				BF728C57198A78710018E76C /* Hemisphere.vsh */,
-				BF728C56198A78710018E76C /* Hemisphere.fsh */,
-				BF728C65198AC03E0018E76C /* LambSkin.vsh */,
-				BF728C64198AC03E0018E76C /* LambSkin.fsh */,
-				BF7F560C19C38AAB004A199A /* LUTSkin.vsh */,
-				BF7F560E19C38AC7004A199A /* LUTSkin.fsh */,
-				BF035B6519869A1000F1C758 /* PhongPointLight.vsh */,
-				BF035B6419869A1000F1C758 /* PhongPointLight.fsh */,
-				BF23482E19B777AC00DAEF95 /* ThinFilm.vsh */,
-				BF23483019B777B800DAEF95 /* ThinFilm.fsh */,
-				BF728C50198966CF0018E76C /* Velvet.vsh */,
-				BF728C4F198966CF0018E76C /* Velvet.fsh */,
+				83E1060D29805D13008A89D2 /* Blinn.metal */,
+				83C0DFB029808C34002701C3 /* EdgeFuzz.metal */,
+				83F2A9642980968300A93A09 /* EnvMap.metal */,
+				83F2A9662980B99100A93A09 /* GlossyWetHighlight.metal */,
+				83F2A9682980DBC200A93A09 /* Gooch.metal */,
+				83F2A96A2980E96600A93A09 /* Hemisphere.metal */,
+				83F2A96C2980EDDC00A93A09 /* LambSkin.metal */,
+				83F2A9742980F5BA00A93A09 /* LUTSkin.metal */,
+				83C0DFAE2980742D002701C3 /* Phong.metal */,
+				83F2A9762980FBF700A93A09 /* ThinFilm.metal */,
+				834C786429810588002DBB57 /* Velvet.metal */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -268,6 +236,7 @@
 				BFB813C81981646100E09822 /* ScenekitStarter */,
 				BFB813E41981646200E09822 /* ScenekitStarterTests */,
 				BFB813C71981646100E09822 /* Products */,
+				83E1060F29805E81008A89D2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -275,7 +244,6 @@
 			isa = PBXGroup;
 			children = (
 				BFB813C61981646100E09822 /* ScenekitStarter.app */,
-				BFB813E11981646200E09822 /* ScenekitStarterTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -291,8 +259,6 @@
 				BFB813D11981646100E09822 /* CWHLightingView.m */,
 				BFB813D31981646100E09822 /* CWHLightingViewController.h */,
 				BFB813D41981646100E09822 /* CWHLightingViewController.m */,
-				BF035B601986986E00F1C758 /* CWHShadingNode.h */,
-				BF035B611986986E00F1C758 /* CWHShadingNode.m */,
 				BF035B6C19882D8200F1C758 /* CWHBlinnProgram.h */,
 				BF035B6D19882D8200F1C758 /* CWHBlinnProgram.m */,
 				BFE9F699199EB178000D9153 /* CWHBlinnParameterViewController.h */,
@@ -395,45 +361,23 @@
 			productReference = BFB813C61981646100E09822 /* ScenekitStarter.app */;
 			productType = "com.apple.product-type.application";
 		};
-		BFB813E01981646200E09822 /* ScenekitStarterTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = BFB813EE1981646200E09822 /* Build configuration list for PBXNativeTarget "ScenekitStarterTests" */;
-			buildPhases = (
-				BFB813DD1981646200E09822 /* Sources */,
-				BFB813DE1981646200E09822 /* Frameworks */,
-				BFB813DF1981646200E09822 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				BFB813E31981646200E09822 /* PBXTargetDependency */,
-			);
-			name = ScenekitStarterTests;
-			productName = ScenekitStarterTests;
-			productReference = BFB813E11981646200E09822 /* ScenekitStarterTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		BFB813BE1981646100E09822 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 1410;
 				ORGANIZATIONNAME = "Creative Workflow Hacks";
 				TargetAttributes = {
 					BFB813C51981646100E09822 = {
 						CreatedOnToolsVersion = 6.0;
 					};
-					BFB813E01981646200E09822 = {
-						CreatedOnToolsVersion = 6.0;
-						TestTargetID = BFB813C51981646100E09822;
-					};
 				};
 			};
 			buildConfigurationList = BFB813C11981646100E09822 /* Build configuration list for PBXProject "ScenekitStarter" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -445,7 +389,6 @@
 			projectRoot = "";
 			targets = (
 				BFB813C51981646100E09822 /* ScenekitStarter */,
-				BFB813E01981646200E09822 /* ScenekitStarterTests */,
 			);
 		};
 /* End PBXProject section */
@@ -455,53 +398,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFF2DE0A198847D100FBDAAD /* Gooch.fsh in Resources */,
-				BF728C60198AB4500018E76C /* GlossyWetHighlight.vsh in Resources */,
 				BFFB6DF0198C368900C14A7C /* LightingModelWindow.xib in Resources */,
-				BF7F560F19C38AC7004A199A /* LUTSkin.fsh in Resources */,
 				BF7F561419C39A6C004A199A /* GlossyWetHighlightParameterView.xib in Resources */,
-				BF728C59198A78710018E76C /* Hemisphere.vsh in Resources */,
-				BF23483119B777B800DAEF95 /* ThinFilm.fsh in Resources */,
-				BF728C5F198AB4500018E76C /* GlossyWetHighlight.fsh in Resources */,
-				BFF2DE0B198847D100FBDAAD /* Gooch.vsh in Resources */,
-				BF728C52198966CF0018E76C /* Velvet.vsh in Resources */,
-				BF035B6719869A1000F1C758 /* PhongPointLight.vsh in Resources */,
-				BFE2962019AB6F19006D5336 /* EnvMap.fsh in Resources */,
-				BF035B6619869A1000F1C758 /* PhongPointLight.fsh in Resources */,
-				BF035B6A1987E9C300F1C758 /* Blinn.fsh in Resources */,
 				BFE9F6A2199EB2CD000D9153 /* EdgeFuzzParameterView.xib in Resources */,
 				BFFB6DE8198BF0A500C14A7C /* PhongPointLightParameterView.xib in Resources */,
-				BF728C58198A78710018E76C /* Hemisphere.fsh in Resources */,
-				BF23482F19B777AC00DAEF95 /* ThinFilm.vsh in Resources */,
 				BFB813D91981646200E09822 /* Images.xcassets in Resources */,
 				BFFB6DF2198C40CD00C14A7C /* CWHLightingView.xib in Resources */,
 				BF018EF2199A93F700917508 /* GoochParameterView.xib in Resources */,
 				BFE2961B19AB6EA3006D5336 /* EnvMap.png in Resources */,
-				BF728C66198AC03E0018E76C /* LambSkin.fsh in Resources */,
 				BFE295DD19A675B4006D5336 /* LambSkinParameterView.xib in Resources */,
 				BFE295D819A62CA2006D5336 /* HemisphereParameterView.xib in Resources */,
-				BF728C51198966CF0018E76C /* Velvet.fsh in Resources */,
 				BFB813DC1981646200E09822 /* MainMenu.xib in Resources */,
-				BF728C6D198AE6EF0018E76C /* EdgeFuzz.fsh in Resources */,
-				BF035B6B1987E9C300F1C758 /* Blinn.vsh in Resources */,
 				BFE2961C19AB6EA3006D5336 /* EnvMapInterior.png in Resources */,
 				BF7F560B19C38440004A199A /* LUTSkinParameterView.xib in Resources */,
 				BF23483819B8EB9500DAEF95 /* ThinFilmParameterView.xib in Resources */,
-				BF728C6E198AE6EF0018E76C /* EdgeFuzz.vsh in Resources */,
 				BFE9F69D199EB178000D9153 /* BlinnParameterView.xib in Resources */,
-				BF728C67198AC03E0018E76C /* LambSkin.vsh in Resources */,
-				BFE2961E19AB6F0A006D5336 /* EnvMap.vsh in Resources */,
 				BFE2962519ABABA3006D5336 /* EnvMapParameterView.xib in Resources */,
 				BFE9F698199E385E000D9153 /* VelvetParameterView.xib in Resources */,
-				BF7F560D19C38AAB004A199A /* LUTSkin.vsh in Resources */,
 				BF23483319B7BD4300DAEF95 /* FringeMap.png in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BFB813DF1981646200E09822 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,14 +426,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83F2A96D2980EDDC00A93A09 /* LambSkin.metal in Sources */,
 				BF7F561319C39A6C004A199A /* CWHGlossyWetHighlightParameterViewController.m in Sources */,
 				BFB813D51981646100E09822 /* CWHLightingViewController.m in Sources */,
 				BFB813D21981646100E09822 /* CWHLightingView.m in Sources */,
 				BF728C4E1989669F0018E76C /* CWHVelvetProgram.m in Sources */,
 				BF7F560A19C38440004A199A /* CWHLUTSkinParameterViewController.m in Sources */,
 				BF728C5C198AB3980018E76C /* CWHGlossyWetHighlightProgram.m in Sources */,
+				83F2A9692980DBC200A93A09 /* Gooch.metal in Sources */,
+				83F2A9672980B99100A93A09 /* GlossyWetHighlight.metal in Sources */,
 				BFE295DC19A675B4006D5336 /* CWHLambSkinParameterViewController.m in Sources */,
 				BF728C55198A77E60018E76C /* CWHHemisphereProgram.m in Sources */,
+				834C786529810588002DBB57 /* Velvet.metal in Sources */,
+				83C0DFAF2980742D002701C3 /* Phong.metal in Sources */,
 				BFB813CF1981646100E09822 /* AppDelegate.m in Sources */,
 				BF018EF5199A948F00917508 /* CWHGoochParameterViewController.m in Sources */,
 				BF035B6E19882D8200F1C758 /* CWHBlinnProgram.m in Sources */,
@@ -537,31 +456,20 @@
 				BFF2DE07198846F500FBDAAD /* CWHGoochProgram.m in Sources */,
 				BF728C63198ABF450018E76C /* CWHLambSkinProgram.m in Sources */,
 				BFE9F68F199CFF52000D9153 /* CWHParameterViewController.m in Sources */,
+				83E1060E29805D13008A89D2 /* Blinn.metal in Sources */,
+				83F2A9772980FBF700A93A09 /* ThinFilm.metal in Sources */,
 				BF91E0AF198AEF6A00965DF7 /* CWHLUTSkinProgram.m in Sources */,
 				BFE295E019AB66A7006D5336 /* CWHEnvMapProgram.m in Sources */,
+				83F2A96B2980E96600A93A09 /* Hemisphere.metal in Sources */,
 				BF23483719B8EB9500DAEF95 /* CWHThinFilmParameterViewController.m in Sources */,
-				BF035B621986986E00F1C758 /* CWHShadingNode.m in Sources */,
+				83F2A9652980968300A93A09 /* EnvMap.metal in Sources */,
+				83C0DFB129808C34002701C3 /* EdgeFuzz.metal in Sources */,
+				83F2A9752980F5BA00A93A09 /* LUTSkin.metal in Sources */,
 				BFDF1DC719BF9C8200DD1473 /* CWHLightingProgram.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BFB813DD1981646200E09822 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				BFB813E81981646200E09822 /* ScenekitStarterTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		BFB813E31981646200E09822 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BFB813C51981646100E09822 /* ScenekitStarter */;
-			targetProxy = BFB813E21981646200E09822 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		BFB813DA1981646200E09822 /* MainMenu.xib */ = {
@@ -579,27 +487,43 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
+					"GL_SILENCE_DEPRECATION=1",
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -609,8 +533,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = YES;
+				MTL_PREPROCESSOR_DEFINITIONS = "";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -620,33 +545,48 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_PREPROCESSOR_DEFINITIONS = "";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -655,9 +595,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				INFOPLIST_FILE = ScenekitStarter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cwh.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -666,46 +616,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = NO;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				INFOPLIST_FILE = ScenekitStarter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cwh.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		BFB813EF1981646200E09822 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ScenekitStarter.app/Contents/MacOS/ScenekitStarter";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = ScenekitStarterTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-			};
-			name = Debug;
-		};
-		BFB813F01981646200E09822 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ScenekitStarter.app/Contents/MacOS/ScenekitStarter";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = ScenekitStarterTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Release;
 		};
@@ -726,15 +645,6 @@
 			buildConfigurations = (
 				BFB813EC1981646200E09822 /* Debug */,
 				BFB813ED1981646200E09822 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		BFB813EE1981646200E09822 /* Build configuration list for PBXNativeTarget "ScenekitStarterTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BFB813EF1981646200E09822 /* Debug */,
-				BFB813F01981646200E09822 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

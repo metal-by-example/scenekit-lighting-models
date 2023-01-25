@@ -10,7 +10,6 @@
 #import <SceneKit/SceneKit.h>
 #import "CWHParameterViewProtocol.h"
 
-
 @interface CWHParameterViewController : NSViewController
 @property (nonatomic, retain) id delegate;
 @property (strong) SCNProgram *program;

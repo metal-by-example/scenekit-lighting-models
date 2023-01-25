@@ -7,14 +7,10 @@
 //
 
 #import <SceneKit/SceneKit.h>
-#import <GLKit/GLKit.h>
-#import <OpenGL/gl.h>
-#import <OpenGL/glext.h>
 #import "CWHLightingProgram.h"
 
-@interface CWHEnvMapProgram : CWHLightingProgram<SCNProgramDelegate, NSCoding>
+@interface CWHEnvMapProgram : CWHLightingProgram <SCNProgramDelegate, NSSecureCoding>
 
-@property (strong) SCNNode *lightnode;
 @property (strong) NSColor *diffuseColor;
 @property (strong) NSColor *ambientColor;
 @property (assign) double ratio;

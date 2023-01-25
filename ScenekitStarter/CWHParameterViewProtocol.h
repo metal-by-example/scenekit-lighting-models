@@ -10,6 +10,6 @@
 #import <SceneKit/SceneKit.h> 
 
 @protocol CWHParameterViewProtocol <NSObject>
--(void)parameterViewWillClose;
--(void)updateShaderValues:(SCNProgram *)program;
+- (void)parameterViewWillClose;
+- (void)updateProgram:(SCNProgram *)program shadableProperties:(NSDictionary *)properties;
 @end

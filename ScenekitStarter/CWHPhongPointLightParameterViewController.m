@@ -59,11 +59,6 @@
     
 }
 
--(void)viewDidDisappear
-{
-
-}
-
 -(IBAction)updateMaterialSpecularity:(id)sender
 {
     NSSlider *slider = sender;
@@ -106,15 +101,14 @@
 
 -(void)updateShaderValues
 {
-
-    CWHPhongPointLightProgram *program = [CWHPhongPointLightProgram program];
+    CWHPhongPointLightProgram *program = (CWHPhongPointLightProgram *)self.program;
 
     program.lightColor = self.lightColor;
     program.ambientColor = self.ambientColor;
     program.shininess = self.shininess;
     program.materialSpecularity = self.materialSpecularity;
     
-    [self.delegate updateShaderValues:program];
+    [self.delegate updateProgram:program shadableProperties:nil];
 }
 
 @end

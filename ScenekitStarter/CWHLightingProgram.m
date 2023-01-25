@@ -10,23 +10,28 @@
 
 @implementation CWHLightingProgram
 
+- (id)init {
+    return [self initWithProgram:@"PhongPointLight"];
+}
+
 - (id)initWithProgram:(NSString *)program {
     self = [super init];
     if (self) {
+        _lightPosition = SCNVector3Make(0, 10, 10);
       
         NSURL *vertexShaderURL   = [[NSBundle mainBundle] URLForResource:program withExtension:@"vsh"];
         NSURL *fragmentShaderURL = [[NSBundle mainBundle] URLForResource:program withExtension:@"fsh"];
-        
+
         NSString *vertexShader = [[NSString alloc] initWithContentsOfURL:vertexShaderURL
                                                                 encoding:NSUTF8StringEncoding
                                                                    error:NULL];
         NSString *fragmentShader = [[NSString alloc] initWithContentsOfURL:fragmentShaderURL
                                                                   encoding:NSUTF8StringEncoding
                                                                      error:NULL];
-        // Assign the shader
+        //// Assign the shader
         self.vertexShader   = vertexShader;
         self.fragmentShader = fragmentShader;
-        
+
         // Bind geometry source semantics to the vertex shader attributes
         [self setSemantic:SCNGeometrySourceSemanticVertex forSymbol:@"a_srcPos" options:nil];
         [self setSemantic:SCNGeometrySourceSemanticNormal forSymbol:@"a_normPos" options:nil];
@@ -37,17 +42,27 @@
         [self setSemantic:SCNModelViewProjectionTransform forSymbol:@"u_mvproj" options:nil];
         [self setSemantic:SCNProjectionTransform forSymbol:@"u_proj" options:nil];
         [self setSemantic:SCNNormalTransform forSymbol:@"u_norm" options:nil];
-       
-       
+
         // Become the program delegate so that you get the binding callback
         self.delegate = self;
     }
     return self;
 }
 
-- (id)init {
-    //default program
-    return [self initWithProgram:@"PhongPointLight"];
+- (instancetype)initWithLibrary:(id<MTLLibrary>)library
+             vertexFunctionName:(NSString *)vertexFunctionName
+           fragmentFunctionName:(NSString *)fragmentFunctionName
+{
+    if ((self = [super init])) {
+        _lightPosition = SCNVector3Make(0, 10, 10);
+
+        self.library = library;
+        self.vertexFunctionName = vertexFunctionName;
+        self.fragmentFunctionName = fragmentFunctionName;
+
+        self.delegate = self;
+    }
+    return self;
 }
 
 @end

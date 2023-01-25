@@ -9,9 +9,8 @@
 #import <SceneKit/SceneKit.h>
 #import "CWHLightingProgram.h"
 
-@interface CWHGlossyWetHighlightProgram : CWHLightingProgram<SCNProgramDelegate>
+@interface CWHGlossyWetHighlightProgram : CWHLightingProgram<SCNProgramDelegate, NSSecureCoding>
 
-@property (strong) SCNNode *lightnode;
 @property (strong) NSColor *ambientColor;
 @property (strong) NSColor *diffuseColor;
 @property (strong) NSColor *specularColor;

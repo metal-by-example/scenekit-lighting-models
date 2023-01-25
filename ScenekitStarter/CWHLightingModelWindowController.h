@@ -16,13 +16,14 @@
 }
 
 @property (weak) IBOutlet NSMenu *lightingModelMenu;
+@property (weak) IBOutlet NSPopUpButton *lightingModelPopupButton;
+@property (weak) IBOutlet NSToolbarItem *parameterToolbarItem;
 -(IBAction)showInputParameters:(id)sender;
 -(IBAction)updateLightingModel:(id)sender;
 
-
-@property (strong) CWHLightingViewController *lightingViewController;
+@property (strong) IBOutlet CWHLightingViewController *lightingViewController;
 @property (assign) BOOL lightingParameterState;
-@property (strong) NSString *currentLightingProgram;
+@property (strong) NSString *currentLightingModel;
 @property (strong) SCNProgram *currentProgram;
 
 @end

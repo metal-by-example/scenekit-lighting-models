@@ -47,12 +47,12 @@
 -(void)updateShaderValues
 {
     
-    CWHHemisphereProgram *program = [CWHHemisphereProgram program];
+    CWHHemisphereProgram *program = (CWHHemisphereProgram *)self.program;
     
     program.skyColor = self.skyColor;
     program.groundColor = self.groundColor;
 
-    [self.delegate updateShaderValues:program];
+    [self.delegate updateProgram:program shadableProperties:nil];
 }
 
 @end

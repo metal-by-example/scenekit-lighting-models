@@ -7,37 +7,45 @@
 //
 
 #import "CWHBlinnProgram.h"
-#import <GLKit/GLKit.h>
-#import <OpenGL/gl.h>
-#import <OpenGL/glext.h>
 
 @implementation CWHBlinnProgram
 
++(BOOL) supportsSecureCoding {
+    return YES;
+}
+
 -(instancetype)init
 {
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
     
-    self = [super initWithProgram:@"Blinn"];
+    self = [super initWithLibrary:library vertexFunctionName:@"BlinnVertex" fragmentFunctionName:@"BlinnFragment"];
     
     if ( self != nil )
     {
-        
-        // Become the program delegate so that you get the binding callback
         self.delegate = self;
-        //defaults
-        self.ambientColor = [NSColor colorWithRed:0. green:0. blue:0. alpha:1.];
+
+        [self bindBuffers];
+
+        self.ambientColor = [NSColor colorWithRed:0 green:0 blue:0 alpha:1];
         self.lightColor = [NSColor redColor];
     }
     
     return self;
-    
-    
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
-    if (self = [super initWithProgram:@"Blinn"]) {
-        self.ambientColor =[decoder decodeObjectForKey:@"ambientColor"];
-        self.lightColor  = [decoder decodeObjectForKey:@"lightColor"];
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
+
+    self = [super initWithLibrary:library vertexFunctionName:@"BlinnVertex" fragmentFunctionName:@"BlinnFragment"];
+
+    if (self != nil) {
+        self.ambientColor = [decoder decodeObjectOfClass:[NSColor class] forKey:@"ambientColor"];
+        self.lightColor = [decoder decodeObjectOfClass:[NSColor class] forKey:@"lightColor"];
         
+        [self bindBuffers];
+
         self.delegate = self;
     }
     return self;
@@ -48,60 +56,45 @@
     [encoder encodeObject:_lightColor forKey:@"lightColor"];
 }
 
-- (BOOL)    program:(SCNProgram *)program
- bindValueForSymbol:(NSString *)symbol
-         atLocation:(unsigned int)location
-          programID:(unsigned int)programID
-           renderer:(SCNRenderer *)renderer
-{
-    
-    //NSLog(@" symbol %@", symbol);
-    
-    if ([symbol isEqualToString:@"light_position"]) {
-        //NSLog(@" lightnode %@", self.lightnode);
-        if(self.lightnode){
-            //NSLog(@" lightnode position %f, %f, %f " , self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
-            glUniform3f(location, self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
-        }
-        
-        return YES; // indicate that the symbol was bound successfully.
-    }
-    
-    if ([symbol isEqualToString:@"light_color"]) {
+- (void)bindBuffers {
+    SCNBufferBindingBlock lightBlock = ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        struct LightUniforms {
+            float diffuseIntensity[3];
+            float ambientIntensity[3];
+            float position[3];
+        } lights;
 
-        if(self.lightColor){
-            
-            glUniform3f(location,[self.lightColor redComponent] , [self.lightColor greenComponent] , [self.lightColor blueComponent]);
-            
-        }else{
-            if(self.lightnode){
-                glUniform3f(location,[self.lightnode.light.color redComponent] , [self.lightnode.light.color greenComponent] , [self.lightnode.light.color blueComponent]);
-            }
+        memset(&lights, 0, sizeof(lights));
+
+        lights.position[0] = self.lightPosition.x;
+        lights.position[1] = self.lightPosition.y;
+        lights.position[2] = self.lightPosition.z;
+
+        if (self.lightColor) {
+            lights.diffuseIntensity[0] = [self.lightColor redComponent];
+            lights.diffuseIntensity[1] = [self.lightColor greenComponent];
+            lights.diffuseIntensity[2] = [self.lightColor blueComponent];
         }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"light_ambient"]) {
-        
-        if(self.ambientColor){
-            //NSLog(@" self.ambient red %f green %f blue %f", [self.ambientColor redComponent], [self.ambientColor greenComponent], [self.ambientColor blueComponent]);
-            glUniform3f(location,[self.ambientColor redComponent] , [self.ambientColor greenComponent] , [self.ambientColor blueComponent]);
-            
+
+        if (self.ambientColor) {
+            lights.ambientIntensity[0] = [self.ambientColor redComponent];
+            lights.ambientIntensity[1] = [self.ambientColor greenComponent];
+            lights.ambientIntensity[2] = [self.ambientColor blueComponent];
         }
-        
-        return YES;
-    }
-    
-    return NO; // no symbol was bound.
+
+        [buffer writeBytes:&lights length:sizeof(lights)];
+    };
+
+    [self handleBindingOfBufferNamed:@"vertexLight" frequency:SCNBufferFrequencyPerFrame usingBlock:lightBlock];
+    [self handleBindingOfBufferNamed:@"fragmentLight" frequency:SCNBufferFrequencyPerFrame usingBlock:lightBlock];
 }
 
-#pragma  mark SCNProgramDelegate Protocol Methods
+#pragma  mark - SCNProgramDelegate Protocol Methods
+
 - (void)program:(SCNProgram*)program handleError:(NSError*)error {
     // Log the shader compilation error
     NSLog(@"SceneKit compilation error: %@", error);
 }
-
-
 
 @end

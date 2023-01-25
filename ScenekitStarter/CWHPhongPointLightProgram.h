@@ -9,9 +9,8 @@
 #import <SceneKit/SceneKit.h>
 #import "CWHLightingProgram.h"
 
-@interface CWHPhongPointLightProgram: CWHLightingProgram<SCNProgramDelegate, NSCoding>
+@interface CWHPhongPointLightProgram: CWHLightingProgram <SCNProgramDelegate, NSSecureCoding>
 
-@property (strong) SCNNode *lightnode;
 @property (strong) NSColor *lightColor;
 @property (strong) NSColor *ambientColor;
 

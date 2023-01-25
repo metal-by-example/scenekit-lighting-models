@@ -7,39 +7,53 @@
 //
 
 #import "CWHLambSkinProgram.h"
-#import <GLKit/GLKit.h>
-#import <OpenGL/gl.h>
-#import <OpenGL/glext.h>
 
 @implementation CWHLambSkinProgram
 
++(BOOL) supportsSecureCoding {
+    return YES;
+}
+
 -(instancetype)init
 {
-    
-    self = [super initWithProgram:@"LambSkin"];
-    
-    if ( self != nil )
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
+
+    self = [super initWithLibrary:library vertexFunctionName:@"LambSkinVertex" fragmentFunctionName:@"LambSkinFragment"];
+
+    if (self != nil)
     {
-        
-        NSColor *diffuseColor = [NSColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1.];
+        self.delegate = self;
+
+        [self bindBuffers];
+
+        NSColor *diffuseColor = [NSColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1.0];
         self.diffuseColor = diffuseColor;
-        NSColor *ambientColor = [NSColor colorWithRed:0. green:0. blue:0. alpha:1.];
+        NSColor *ambientColor = [NSColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
         self.ambientColor = ambientColor;
-        NSColor *subColor = [NSColor colorWithRed:1. green:0. blue:0. alpha:1.];
+        NSColor *subColor = [NSColor colorWithRed:1. green:0.0 blue:0.0 alpha:1.0];
         self.subColor = subColor;
         self.rolloff = 0.575;
     }
     
     return self;
-    
-    
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
-    if (self = [super initWithProgram:@"LambSkin"]) {
-        self.diffuseColor =[decoder decodeObjectForKey:@"diffuseColor"];
-        self.ambientColor  = [decoder decodeObjectForKey:@"ambientColor"];
-        self.subColor = [decoder decodeObjectForKey:@"subColor"];
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLLibrary> library = [device newDefaultLibrary];
+
+    self = [super initWithLibrary:library vertexFunctionName:@"LambSkinVertex" fragmentFunctionName:@"LambSkinFragment"];
+
+    if (self != nil)
+    {
+        self.delegate = self;
+
+        [self bindBuffers];
+
+        self.diffuseColor =[decoder decodeObjectOfClass:[NSColor class] forKey:@"diffuseColor"];
+        self.ambientColor  = [decoder decodeObjectOfClass:[NSColor class] forKey:@"ambientColor"];
+        self.subColor = [decoder decodeObjectOfClass:[NSColor class] forKey:@"subColor"];
         self.rolloff = [decoder decodeDoubleForKey:@"rolloff"];
 
     }
@@ -51,78 +65,60 @@
     [encoder encodeObject:_ambientColor forKey:@"ambientColor"];
     [encoder encodeObject:_subColor forKey:@"subColor"];
     [encoder encodeDouble:_rolloff forKey:@"rolloff"];
-    
 }
 
-- (BOOL)    program:(SCNProgram *)program
- bindValueForSymbol:(NSString *)symbol
-         atLocation:(unsigned int)location
-          programID:(unsigned int)programID
-           renderer:(SCNRenderer *)renderer
-{
-    
-    //NSLog(@" symbol %@", symbol);
-    
-    if ([symbol isEqualToString:@"light_position"]) {
-        //NSLog(@" lightnode %@", self.lightnode);
-        if(self.lightnode){
-            //NSLog(@" lightnode position %f, %f, %f " , self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
-            glUniform3f(location, self.lightnode.position.x, self.lightnode.position.y, self.lightnode.position.z);
+- (void)bindBuffers {
+    SCNBufferBindingBlock lightBlock = ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        struct LightConstants {
+            float position[3];
+        } lights;
+
+        lights.position[0] = self.lightPosition.x;
+        lights.position[1] = self.lightPosition.y;
+        lights.position[2] = self.lightPosition.z;
+
+        [buffer writeBytes:&lights length:sizeof(lights)];
+    };
+
+    SCNBufferBindingBlock materialBlock = ^(id<SCNBufferStream> buffer, SCNNode *node, id<SCNShadable> shadable, SCNRenderer *renderer)
+    {
+        struct MaterialConstants {
+            float ambientColor[3];
+            float diffuseColor[3];
+            float subColor[3];
+            float rolloff;
+        } material;
+
+        if (self.ambientColor) {
+            material.ambientColor[0] = self.ambientColor.redComponent;
+            material.ambientColor[1] = self.ambientColor.greenComponent;
+            material.ambientColor[2] = self.ambientColor.blueComponent;
         }
-        
-        return YES; // indicate that the symbol was bound successfully.
-    }
-    
-    if ([symbol isEqualToString:@"light_color"]) {
-        
-        if(self.lightnode){
-            //NSLog(@" light_color %f, %f, %f", [self.lightnode.light.color redComponent], [self.lightnode.light.color greenComponent], [self.lightnode.light.color blueComponent]);
-            glUniform3f(location,[self.lightnode.light.color redComponent] , [self.lightnode.light.color greenComponent] , [self.lightnode.light.color blueComponent]);
+
+        if (self.diffuseColor) {
+            material.diffuseColor[0] = self.diffuseColor.redComponent;
+            material.diffuseColor[1] = self.diffuseColor.greenComponent;
+            material.diffuseColor[2] = self.diffuseColor.blueComponent;
         }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"DiffuseColor"]) {
-        
-        if(self.diffuseColor){
-            glUniform4f(location,[self.diffuseColor redComponent] , [self.diffuseColor greenComponent] , [self.diffuseColor blueComponent], [self.diffuseColor alphaComponent]);
+
+        if (self.subColor) {
+            material.subColor[0] = self.subColor.redComponent;
+            material.subColor[1] = self.subColor.greenComponent;
+            material.subColor[2] = self.subColor.blueComponent;
         }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"AmbientColor"]) {
-        
-        if(self.ambientColor){
-            glUniform4f(location,[self.ambientColor redComponent] , [self.ambientColor greenComponent] , [self.ambientColor blueComponent], [self.ambientColor alphaComponent]);
-        }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"SubColor"]) {
-        
-        if(self.subColor){
-            glUniform4f(location,[self.subColor redComponent] , [self.subColor greenComponent] , [self.subColor blueComponent], [self.subColor alphaComponent]);
-        }
-        
-        return YES;
-    }
-    
-    if ([symbol isEqualToString:@"Rolloff"]) {
-        
-        if(self.rolloff){
-            glUniform1f(location,self.rolloff);
-        }
-        
-        return YES;
-    }
-    
-    return NO; // no symbol was bound.
+
+        material.rolloff = self.rolloff;
+
+        [buffer writeBytes:&material length:sizeof(material)];
+    };
+
+    [self handleBindingOfBufferNamed:@"light" frequency:SCNBufferFrequencyPerFrame usingBlock:lightBlock];
+    [self handleBindingOfBufferNamed:@"material" frequency:SCNBufferFrequencyPerFrame usingBlock:materialBlock];
 }
 
-#pragma  mark SCNProgramDelegate Protocol Methods
+#pragma mark -  SCNProgramDelegate Protocol Methods
+
 - (void)program:(SCNProgram*)program handleError:(NSError*)error {
     // Log the shader compilation error
     NSLog(@"SceneKit compilation error: %@", error);

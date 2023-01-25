@@ -12,7 +12,6 @@
 
 -(void)mouseDown:(NSEvent *)theEvent
 {
-    
     [super mouseDown:theEvent];
 }
 
